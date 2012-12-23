@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Memo Remainder</title>
+    <link href="./css/memoremainder.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css" />
+    <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
+    <link href="./css/bootstrap.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+</head>
+<body background="./img/webtreats_stone_3.jpg">
+
+<script src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/jquery.tooltip.js/jquery.tooltip.js"></script>
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Remainder</a>
+
+    <ul class="nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#"><i class="icon-off"></i>Sign in</a></li>
+        <div class="btn-group" >
+          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> User</a>
+          <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="i"></i> Make admin</a></li>
+          </ul>
+        </div>
+    </ul>
+
+  </div>
+</div>
+       
+        <div class="row">
+          
+          <div class="span4">
+          </div>
+
+
+          <div class="span3">
+            <div align="right">
+              <!-- 検索 -->
+              <form class="form-search">
+                <input type="text" class="input-medium search-query">
+                <button type="submit" class="btn">検索</button>
+              </form>    
+              <form action="http://www.google.com/search" method="get">
+                <input type="hidden" name="hl" value="ja">
+                <input type="hidden" name="as_sitesearch" value="サイトのURL">
+                <input type="text" name="q" size="16" value="">
+                <input class="button" type="submit" value="Googleでサイト内検索">
+              </form>
+            </div>
+
+            <h1>Category</h1>
+
+            <!--
+            [% tagslist.split(',').join('..') %]<br>
+            -->
+            [% FOREACH item = remaindermemo %]
+            <div class="well well-small">
+            <input type="checkbox">
+            <p align="right">
+              &nbsp;<button class="close">&times;</button>
+            </p>
+            
+              <pre>
+              <p>[% item.memo | html %]</p>
+             </pre>
+            <div class="tag">
+              
+              <div align="right" style="display: inline-block; _display: inline;">
+                <button class="btn btn-mini"><i class="icon-pencil"></i></button>
+              </div>&nbsp;&nbsp;&nbsp;
+              <p id="tagdata-list">
+              [%- FOREACH tag= tagsarray -%]
+                [%- tag -%]([% tagcnt %])
+              [%- END -%]</p><br>
+              
+              <span class="label">default</span>
+              <span class="label label-success">Success</span>
+              <span class="label label-warning">Warning</span>
+              <span class="label label-important">Important</span>
+              <span class="label label-info">Info</span>
+              <span class="label label-inverse">Inverse</span>
+              
+            </div>
+              <!-- <td><font color="#d0d0d0">|</font>   [% item.days | html %]</td> -->
+            </div>
+            
+
+            [% END %]
+            
+            
+            <br>
+          </div>
+          <div class="span2">
+            [% INCLUDE 'setting.tt' %]
+            <hr>
+            <b><font size="3" color="blue" >タグ:</font><b><br>
+            [%- FOREACH tag= tagsarray -%]
+              <button class="btn btn-small btn-primary" type="button">[%- tag -%]([% tagcnt %])</button>
+            [%- END -%]<br>
+              
+            
+          </div>
+        </div>
+        </div>
+</body>
+
+</html>

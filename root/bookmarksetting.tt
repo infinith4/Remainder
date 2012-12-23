@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Bookmark Reminder</title>
+    <link href="./css/memoremainder.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css" />
+    <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
+    <link href="./css/bootstrap.css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+</head>
+<body background="./img/webtreats_stone_3.jpg">
+
+<script src="./js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./js/jquery.tooltip.js/jquery.tooltip.js"></script>
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Remainder</a>
+
+    <ul class="nav">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#"><i class="icon-off"></i>Sign in</a></li>
+        <div class="btn-group" >
+          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> User</a>
+          <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
+            <li><a href="#"><i class="icon-trash"></i> Delete</a></li>
+            <li><a href="#"><i class="icon-ban-circle"></i> Ban</a></li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="i"></i> Make admin</a></li>
+          </ul>
+        </div>
+    </ul>
+
+  </div>
+</div>
+       
+        <div class="row">
+          <div class="span3">
+            <form method="POST" action="/bookmarksetting">
+                
+            設定<br>
+            <!-- 複数個をチェックボックスで指定<br> -->
+            <li>Bookmarkをお知らせする設定(<font color="ff0000" size="3">＊</font>は必須)</li>
+
+            <font color="ff0000" size="3">＊</font>
+            タグ : <input type="text" name="tag" value="[%- bookmarksetting.tag -%]">
+            例 ：あとで読む,未読,ReadLater
+            <br><br>
+            関連タグ : <input type="text" name="reltag" value="[%- bookmarksetting.reltag -%]">
+            例 ：重要,本,仕事
+            <br><br>
+            <font color="ff0000" size="3">＊</font>
+            お知らせする件数 ：<input type="text" name="remindnum" value="[%- bookmarksetting.remindnum -%]">
+            <br><br>
+            <font color="ff0000" size="3">＊</font>
+            メールアドレス : <input type="text" name="email" value="[%- bookmarksetting.email -%]">
+            
+            <font color="ff0000" size="3">＊</font>お知らせする時間:<br>
+            
+            <!-- <select name="select" style="width: 30px"> -->
+            <!--google map のルート検索の時間指定のところと同じように,一覧から選択できて,かつ,入力できるようにしたい<br>-->           
+            [% SET days = bookmarksetting.days %]
+            [% days %]<br>
+            <!--
+            [% IF days.match('Mon') == 'Mon' %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Mon" checked>
+            [% END %]
+            [% UNLESS days.match('Mon').defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Mon">
+            [% END %]
+            月
+            -->
+            [% SET msg = 'Mon,Tue,Wed' %]
+            [% m = msg.match('o') %]
+            [% m.0 %]<br>
+            
+            [% IF days.match('Mon').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Mon" checked>
+            [% END %]
+            [% UNLESS days.match('Mon').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Mon">
+            [% END %]
+            月
+            
+            [% IF days.match('Tue').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Tue" checked>
+            [% END %]
+            [% UNLESS days.match('Tue').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Tue">
+            [% END %]
+            火
+            [% IF days.match('Wed').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Wed" checked>
+            [% END %]
+            [% UNLESS days.match('Wed').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Wed">
+            [% END %]
+            水
+            [% IF days.match('Thu').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Thu" checked>
+            [% END %]
+            [% UNLESS days.match('Thu').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Thu">
+            [% END %]
+            木
+            [% IF days.match('Fri').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Fri" checked>
+            [% END %]
+            [% UNLESS days.match('Fri').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Fri">
+            [% END %]
+            金
+            [% IF days.match('Sta').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Sta" checked>
+            [% END %]
+            [% UNLESS days.match('Sta').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Sta">
+            [% END %]
+            土
+            [% IF days.match('Sun').0 == 1 %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Sun" checked>
+            [% END %]
+            [% UNLESS days.match('Sun').0.defined %]
+              <input type="checkbox" name="bookmarkdays" id="optionscheckbox" value="Sun">
+            [% END %]
+            日
+            <br><br>
+            [%- SET dty=datetime.year;dtmo=datetime.month;dtd=datetime.day;dth=datetime.hour;dtmi=datetime.minute; -%]
+            
+            [%-MACRO select (name,start,end) BLOCK -%]
+              <select id="[% name %]" name="[% name %]" style="width:70px;">
+                [%- datetimenowlist = [
+                  {datetimename => 'year',datetimenow => datetimenow.year },
+                  {datetimename => 'month',datetimenow => datetimenow.month },
+                  {datetimename => 'day',datetimenow => datetimenow.day },
+                  {datetimename => 'hour',datetimenow => datetimenow.hour },
+                  {datetimename => 'minute',datetimenow => datetimenow.minute}
+                ]-%]
+              [% UNLESS bookmarksetting.hour.defined %]
+                [%- FOREACH n = datetimenowlist %]
+                  [%- IF name==n.datetimename -%]
+                    [%- FOREACH i = [start..end] %]
+                      [%- IF i==n.datetimenow -%]
+                        <option value="[% i %]" selected >[% i %]</option> 
+<!-- hour or min が0-23 or 0-59のなかで,現時刻に等しいものをselected-->
+                      [%- ELSE -%]
+                        <option value="[% i %]" >[% i %]</option>
+                      [%- END -%]
+                      
+                    [%- END %]
+                  [%- END -%]
+                [%- END -%]
+              [% END %]
+              [%- datetimedblist = [
+                  {datetimename => 'hour',datetimedb => bookmarksetting.hour },
+                  {datetimename => 'minute',datetimedb => bookmarksetting.minute}
+                ]-%]
+              [% IF bookmarksetting.hour.defined %]
+                [%- FOREACH n = datetimedblist %]
+                  [%- IF name==n.datetimename -%]
+                    [%- FOREACH i = [start..end] %]
+                      [%- IF i==n.datetimedb -%]
+                        <option value="[% i %]" selected >[% i %]</option> 
+<!-- hour or min が0-23 or 0-59のなかで,現時刻に等しいものをselected-->
+                      [%- ELSE -%]
+                        <option value="[% i %]" >[% i %]</option>
+                      [%- END -%]
+                    [%- END %]
+                  [%- END -%]
+                [%- END -%]
+              [% END %]
+              </select>
+            [%- END -%]
+            [% select ('hour',0,23) %]時
+            [% select ('minute',0,59) %]分
+            <div class="controls" align="right">
+              <button type="submit" class="btn btn-danger"><i class="icon-envelope icon-white" style="margin-top: 1px;"></i>送信</button>
+              </div>
+            <br><br>
+            </form>
+            </div>
+          </div>
+        
+
+</body>
+
+</html>
