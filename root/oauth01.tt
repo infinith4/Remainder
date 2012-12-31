@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+    <head>
+        <title>Client Flow Example</title>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+        var appId = "376987082389393";
+        
+        
+        if(window.location.hash.length == 0)//アプリを認証していないとき
+        {
+            url = "https://www.facebook.com/dialog/oauth?client_id=" + 
+                     appId  + "&redirect_uri=" + window.location +
+                     "&response_type=token" + "&scope=email";
+            location.href=url; //リダイレクト
+            
+
+        } else {//認証済み
+            accessToken = window.location.hash.substring(1);
+            graphUrl = "https://graph.facebook.com/me?" + accessToken +
+                        "&callback=displayUser"
+
+            //use JSON-P to call the graph
+            var script = document.createElement("script");
+            script.src = graphUrl;
+            document.body.appendChild(script);
+            
+        }        
+
+        function displayUser(user) {
+            userName.innerText = user.name;
+            userEmail.innerText = user.email;
+            id.innerText = id;
+
+        }
+        
+        </script>
+<!--        
+        <p id="userName"></p>
+-->
+    </body>
+</html>

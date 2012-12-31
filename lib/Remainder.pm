@@ -1,4 +1,6 @@
 package Remainder;
+use strict;
+use warnings;
 use Moose;
 use namespace::autoclean;
 
@@ -20,6 +22,10 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+    Session
+    Session::Store::File
+    Session::State::Cookie
+    Authentication
 /;
 
 extends 'Catalyst';
@@ -36,10 +42,41 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config(
+
     name => 'Remainder',
+    default_view => 'TT',
+    default_model => 'RemainderDB',
     # Disable deprecated behavior needed by old applications
     disable_component_resolution_regex_fallback => 1,
     enable_catalyst_header => 1, # Send X-Catalyst header
+    'Plugin::Session' => {
+        expires => 1800,
+        storage => 'tmp',
+        namespace => 'MyApp',
+        cookie_expires => 0,
+        verify_address => 1,
+        verify_user_agent => 1,
+    },
+
+
+    'Plugin::Authentication' => {
+        
+        default => {
+            credentical => {
+                class => 'Password',
+                passwordfield => 'passwd',
+                password_type => 'hashed',
+                password_hash_type => 'MD5',
+            },
+            store => {
+                class => 'DBIx::Class',
+                user_model => 'RemainderDB::Usr',
+                use_userdata_from_session => 1,
+
+            }
+        }
+    },
+
 );
 
 # Start the application

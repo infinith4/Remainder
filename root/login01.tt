@@ -1,0 +1,26 @@
+<html>
+<body>
+<!--
+[% # 未認証の場合はログインフォームを出力 %]
+[% IF! c.user_exists %]
+   <form method="POST">
+     <p>
+       <label for="uid">ユーザー名：</label><br>
+       <input type="text" name="uid" size="15">
+     </p>
+     <p>
+       <label for="passwd">パスワード：</label><br>
+       <input type="text" name="password" size="15">
+     </p>
+     <p>
+     <input type="submit" value="ログイン">
+     </p>
+     </form>
+[% # 認証済みの場合はログアウトのリンクを出力 %]
+[% ELSE %]
+   
+   <a href="[% c.uri_for('/logout') %]">Logout</a>
+[% END %]
+-->
+</body>
+</html>

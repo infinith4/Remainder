@@ -1,11 +1,11 @@
 /*DROP TABLE IF EXISTS `RemainderUsers`;*/
 CREATE TABLE `RemainderUsers` (
 `userid` int(10) NOT NULL AUTO_INCREMENT,
+`user_name` varchar(20) NOT NULL,
 `email` varchar(100),/* user email NOT NULL?*/
-`user_name` varchar(20),
 `created` datetime NOT NULL, /* 作成日 */
-`logindated` datetime NOT NULL, /* 最終ログイン日 */
-`logincount` int(10),
+/*`logindated` datetime NOT NULL*/, /* 最終ログイン日 */
+/*`logincount` int(10),*/
 PRIMARY KEY (`userid`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -71,6 +71,8 @@ for(my $cnt=0; $cnt<=ceil($bookmarknum/$of); $cnt++){
 		push(@issueds, $item->get("issued"));
 	}
 
+
+
 }
 
 for(0 .. $bookmarknum){

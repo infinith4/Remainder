@@ -3,10 +3,14 @@
 <head>
     <meta charset="utf-8">
     <title>Remainder</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!--
-        <link href="css/1.4.0/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    -->
+    <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css">
+   <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
+   <link href="./css/bootstrap.css" rel="stylesheet">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    
+        <link href="css/1.4.0/bootstrap.min.css" rel="stylesheet" type="text/css">
+   
 </head>
 <body>
 <div class="navbar">
@@ -58,18 +62,19 @@
 <div class="hero-unit">
     <h1>Remainder</h1>
     <p>Remainderは,あなたのちょっと気になるを定期的にお知らせします。<br>
-    テスト</p>
+    </p>
 </div>
 
 
 <div class="container-fluid">
   <div class="row-fluid">
     
-      <p>aaaa</p>
+      <p>すぐには必要なことではないけど何かの役に立ちそうなことを教えてくれます。</p>
     
     <div class="span10">
       <!--Body content-->
-      <font color="#0000ff">aaaaa</font>
+      <font color="#0000ff">HatenaBookmarkで、あとで読むタグをつけたBookmarkがたくさん溜まっていませんか？</font><br>
+      そんなあなたに、Bookmarkをお知らせします。
     </div>
   </div>
 </div>

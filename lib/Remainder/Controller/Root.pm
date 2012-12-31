@@ -60,6 +60,8 @@ my $consumer_secret    = 'YXPnSMwBfljWzXVtl9hcmTu1J3g=';
 
 my $title = 'Test Hatena OAuth API';
 
+=pod
+
 sub save_request_token {
     my ($request_token) = @_;
 
@@ -124,6 +126,7 @@ else {
 Standard 404 error page
 
 =cut
+}
 
 sub default :Path {
     my ( $self, $c ) = @_;
@@ -139,10 +142,35 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
+sub login :Local {
+    my ($self,$c) = @_;
+    #formからの入力を取得
+    my $uid = $c->request->params->{uid};
+    my $passwd = $c->request->params->{passwd};
+
+    #user name,passwordを入力時のみ認証処理を実行
+    if(defined($uid) && defined($passwd)){
+        #user name,passwordで認証
+        if($c->authenticate({ uid => $uid ,passwd => $passwd })){
+            #認証成功
+            $c->response->body('hello'.$c->user->get('unam').'さん');
+        }else{
+            #認証失敗時
+            $c->stash->{error} = 'ユーザー名またはパスワードが間違っています';
+        }
+    }
+}
+sub logout :Local {
+    my ($self,$c) = @_;
+    $c->logout;
+    $c->response->redirect($c->uri_for('/'));
+
+}
+
 sub bookmark :Local {
 	my ($self ,$c) = @_;
 	#$c->response->body('こんにちは');
-    #$c->stash->{list} = [$c->model('CatalDB::Book')->all];
+    $c->stash->{bookmark} = [$c->model('RemainderDB::Bookmark')->all];
     #$c->stash->{title} = 'Remainder - あなたの気になるをお知らせ！ -';
     
 }
@@ -304,6 +332,11 @@ sub bookmarksetting :Local {
     }
 
     $c->model('RemainderDB')->storage->debug(1);
+    #Bookmarkから何件か取得する
+    my $row = $c->model('RemainderDB::Bookmark')->find({
+        userid => $userid,
+    }, key => 'bookmarkid' );
+
     
 }
 
@@ -357,7 +390,8 @@ sub memo :Local {
     my $loginuseremail = "tashirohiro4\@gmail.com";
 
     #If user logined site,We check email by DataTable RemainderUsers.Because Email is Primary.
-    $c->stash->{useremail} = $c->model('RemainderDB::RemainderUsers')->find('tashirohiro4\@gmail.com');
+    #$c->stash->{useremail} = $c->model('RemainderDB::RemainderUsers')->find('tashirohiro4\@gmail.com');
+    $c->stash->{useremail} = $loginuseremail;
     #$useremail =  $c->model('RemainderDB::RemainderMemo')->find('$loginuseremail',{key => 'useremail'});
     
     #Create for new login user.

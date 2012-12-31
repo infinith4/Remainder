@@ -63,7 +63,7 @@
             <!--
             [% tagslist.split(',').join('..') %]<br>
             -->
-            [% FOREACH item = remaindermemo %]
+            [% FOREACH item = bookmark %]
             <div class="well well-small">
             <input type="checkbox">
             <p align="right">
@@ -71,7 +71,7 @@
             </p>
             
               <pre>
-              <p>[% item.memo | html %]</p>
+              <p><a href="[% bookmarkid  %]">[% item.title | html %]</a></p>
              </pre>
             <div class="tag">
               
@@ -79,10 +79,7 @@
                 <button class="btn btn-mini"><i class="icon-pencil"></i></button>
               </div>&nbsp;&nbsp;&nbsp;
               <p id="tagdata-list">
-              [%- FOREACH tag= tagsarray -%]
-                [%- tag -%]([% tagcnt %])
-              [%- END -%]</p><br>
-              
+              [% bookmark.reltag  %]
               <span class="label">default</span>
               <span class="label label-success">Success</span>
               <span class="label label-warning">Warning</span>
@@ -101,13 +98,6 @@
             <br>
           </div>
           <div class="span2">
-            [% INCLUDE 'setting.tt' %]
-            <hr>
-            <b><font size="3" color="blue" >タグ:</font><b><br>
-            [%- FOREACH tag= tagsarray -%]
-              <button class="btn btn-small btn-primary" type="button">[%- tag -%]([% tagcnt %])</button>
-            [%- END -%]<br>
-              
             
           </div>
         </div>
