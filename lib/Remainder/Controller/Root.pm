@@ -167,9 +167,18 @@ sub login :Local {
         #user name,passwordで認証
         if($c->authenticate({ uid => $uid ,passwd => $passwd })){
             #認証成功
-            $c->response->body('hello'.$c->user->get('unam').'さん');
+            $c->response->redirect("/memo");
         }else{
             #認証失敗時
+#sub auto : Private {
+#  my ($self, $c) = @_;
+#  if ($c->action->reverse eq 'login') { return 1; }
+#  if (!$c->user_exists) {
+#      $c->response->redirect($c->uri_for('/login'));
+#      return 0;
+#  }
+#  return 1;
+#}
             $c->stash->{error} = 'ユーザー名またはパスワードが間違っています';
         }
     }
@@ -180,6 +189,19 @@ sub logout : Local {
     $c->logout();
     $c->response->redirect("/");
 }
+
+sub auto : Private {
+    my ($self, $c) = @_;
+    if ($c->action->reverse eq 'login') { return 1; }
+    if (!$c->user_exists) {
+        $c->response->redirect($c->uri_for('/login'));
+        return 0;
+    }
+    return 1;
+}
+
+
+
 sub bookmark :Local {
 	my ($self ,$c) = @_;
 	#$c->response->body('こんにちは');
