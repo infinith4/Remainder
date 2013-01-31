@@ -55,10 +55,10 @@ sub index :Local {
     # Hello World
     #$c->response->body( $c->welcome_message );
 
-my $consumer_key   = 'PgpEemhYpWeviQ==';
-my $consumer_secret    = 'YXPnSMwBfljWzXVtl9hcmTu1J3g=';
+#my $consumer_key   = 'PgpEemhYpWeviQ==';
+#my $consumer_secret    = 'YXPnSMwBfljWzXVtl9hcmTu1J3g=';
 
-my $title = 'Test Hatena OAuth API';
+#my $title = 'Test Hatena OAuth API';
 
 =pod
 
@@ -127,6 +127,20 @@ Standard 404 error page
 
 =cut
 }
+sub twitter_login : Local {
+    my ($self, $c) = @_;
+    my $realm = $c->get_auth_realm('twitter');
+    $c->res->redirect( $realm->credential->authenticate_twitter_url($c) );
+}
+
+sub callback : Local {
+   my ($self, $c) = @_;
+   $c->stash->{pagetitle} = 'ログインしました - BESTGAMEON';
+   if (!$c->authenticate(undef,'twitter')) {
+       $c->stash->{pagetitle} = 'ログインエラー - BESTGAMEON';
+       $c->stash->{template} = 'login_error.tt';
+   }
+}
 
 sub default :Path {
     my ( $self, $c ) = @_;
@@ -160,13 +174,12 @@ sub login :Local {
         }
     }
 }
-sub logout :Local {
-    my ($self,$c) = @_;
-    $c->logout;
-    $c->response->redirect($c->uri_for('/'));
 
+sub logout : Local {
+    my ($self, $c) = @_;
+    $c->logout();
+    $c->response->redirect("/");
 }
-
 sub bookmark :Local {
 	my ($self ,$c) = @_;
 	#$c->response->body('こんにちは');

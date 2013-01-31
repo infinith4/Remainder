@@ -69,7 +69,7 @@ __PACKAGE__->config(
             },
             store => {
                 class => 'DBIx::Class',
-                user_model => 'RemainderDB::Usr',
+                user_model => 'CatalDB::Usr',
                 use_userdata_from_session => 1,
                 role_relation => 'roles',
                 role_field => 'role',
@@ -77,6 +77,36 @@ __PACKAGE__->config(
                 # ignore_fields_in_find => ['unam'],
             }
         }
+    },
+
+/*
+    'Plugin::Authentication' => {
+        default_realm => "twitter",
+        realms => {
+            twitter => {
+                credential => {
+                    class => "Twitter",
+                },
+                store => {
+                    class => 'DBIx::Class',
+                    user_model => 'Remainder::Twitteruser',
+                },
+                auto_create_user => 1,
+                consumer_key    => '69HLgtNGXqrNYxhDU9CXg',
+                consumer_secret => '6cu2i6wjUog5hfm6GhuvdIujRK1ykFL6CuTDqR6mY',
+                callback_url => 'http://27.120.91.248//callback',
+            }
+        }
+    },
+*/
+    'validator' => {
+        plugins => [qw/Japanese/],
+        options => {
+            charset => 'utf8',
+        },
+        profiles => __PACKAGE__->path_to('conf/profiles.yml'),
+        messages => __PACKAGE__->path_to('conf/messages.yml'),
+        message_decode_from => 'utf-8',
     },
 
 );
