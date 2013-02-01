@@ -50,8 +50,27 @@ The root page (/)
 
 #sub index :Path :Args(0) {
 sub index :Local {
-    my ( $self, $c ) = @_;
+    my ($self, $c ) = @_;
 
+    my $uid = $c->request->params->{uid};
+    my $passwd = $c->request->params->{passwd};
+
+    #user name,passwordを入力時のみ認証処理を実行
+    if(defined($uid) && defined($passwd)){
+        #user name,passwordで認証
+        if($c->authenticate({ uid => $uid ,passwd => $passwd })){
+            #認証成功
+            
+            $c->response->redirect("/memo");
+        }else{
+            $c->stash->{error} = 'ユーザー名またはパスワードが間違っています';
+        }
+    }
+    if($c->user_exists) {
+        $c->response->redirect($c->uri_for('/memo'));
+    }
+
+}
     # Hello World
     #$c->response->body( $c->welcome_message );
 
@@ -126,7 +145,9 @@ else {
 Standard 404 error page
 
 =cut
-}
+#}
+
+
 sub twitter_login : Local {
     my ($self, $c) = @_;
     my $realm = $c->get_auth_realm('twitter');
@@ -156,6 +177,7 @@ Attempt to render a view, if needed.
 
 sub end : ActionClass('RenderView') {}
 
+=pod
 sub login :Local {
     my ($self,$c) = @_;
     #formからの入力を取得
@@ -167,6 +189,7 @@ sub login :Local {
         #user name,passwordで認証
         if($c->authenticate({ uid => $uid ,passwd => $passwd })){
             #認証成功
+            
             $c->response->redirect("/memo");
         }else{
             #認証失敗時
@@ -183,6 +206,8 @@ sub login :Local {
         }
     }
 }
+=cut
+
 
 sub logout : Local {
     my ($self, $c) = @_;
@@ -190,16 +215,18 @@ sub logout : Local {
     $c->response->redirect("/");
 }
 
+#全認証
 sub auto : Private {
     my ($self, $c) = @_;
-    if ($c->action->reverse eq 'login') { return 1; }
+    if ($c->action->reverse eq 'index') { return 1; }
+    
     if (!$c->user_exists) {
-        $c->response->redirect($c->uri_for('/login'));
+        $c->response->redirect($c->uri_for('/index'));
         return 0;
     }
+    
     return 1;
 }
-
 
 
 sub bookmark :Local {

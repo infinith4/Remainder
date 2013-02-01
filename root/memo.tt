@@ -22,7 +22,10 @@
       <li class="active"><a href="#">Home</a></li>
       <li><a href="#"><i class="icon-off"></i>Sign in</a></li>
         <div class="btn-group" >
-          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> User</a>
+          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i>
+            
+            [% c.user.get('unam') %]
+          </a>
           <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#"><i class="icon-pencil"></i> Edit</a></li>
