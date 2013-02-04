@@ -4,15 +4,15 @@
 //読み込むフォームのhtml
 var file = "form.htm";
 //フォーム全体のid名
-var formContentsID = "#contact";
+var formContentsID = "#memoedit";
 //form要素のid名
 var formID = "#mailform";
 //オーバーレイするレイヤーの透明度（0〜1）
-var overlayOpacity = 1;
+var overlayOpacity = 0.5;
 //オーバーレイするレイヤーの背景色
-var overlayColor = "#35a8d7";
+var overlayColor = "#000000";
 //オーバーレイするレイヤーの背景イメージとポジション
-var overlayImage = "url(img/bg.jpg) repeat-x left center";
+var overlayImage = "url() repeat-x left center";
 //確認画面で複数の項目を区切る文字
 var separator = ", ";
 
@@ -30,8 +30,12 @@ $(document).ready(function(){
 /*======================================================
 オーバーレイフォームを開く
 ======================================================*/
-function showform(){
-	
+function showform(memoid,memo){
+	//alert(memoid + memo);
+	//var editdocument = document.createElement(file);
+	var elmmemo = this.getElementsByTagName("textarea");
+	var str = this.createTextNode(memo);
+	elmmemo[0].appendChild(str);
 	//確認画面表示中フラグをfalseに
 	isConfirm = false;
 

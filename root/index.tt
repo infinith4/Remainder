@@ -3,14 +3,12 @@
 <head>
     <meta charset="utf-8">
     <title>Remainder</title>
+
     <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css">
    <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
    <link href="./css/bootstrap.css" rel="stylesheet">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <link href="./css/bootstrap.css" rel="stylesheet">
-    
-        <link href="css/1.4.0/bootstrap.min.css" rel="stylesheet" type="text/css">
-   
+
 </head>
 <body>
 <div class="navbar">
@@ -19,16 +17,22 @@
     <ul class="nav">
       <li class="active"><a href="index">Home</a></li>
       <li><a href="#"><i class="icon-off"></i>Sign in</a></li>
-      <li><!--
+<!--      
+<form class="navbar-form pull-left">
+  <input type="text" class="span2">
+  <button type="submit" class="btn">Submit</button>
+</form>
+-->
+      <li>
+      <!--
 [%- IF! c.user_exists -%]-->
-  <form method="POST">
-        <br>
-      ユーザ名：
-      <input type="text" name="uid" size="15" />
+  <form method="POST" class="navbar-form pull-left"><br>
+      ユーザ名:
+      <input type="text" name="uid" size="15" class="span2"/>
       パスワード：
       <input type="password" name="passwd" size="15" />
-      <input type="submit" value="ログイン" />
-    
+      <input type="submit" class="btn" value="ログイン" />
+      
   </form>
   <div style="color:Red;">[% error | html %]</div>
 <!--[%- ELSE -%]-->

@@ -410,8 +410,26 @@ sub remainder :Local {
    
 }
 
+sub memoedit :Private {
+    my ($self,$c) = @_;
+    my @days = $c->request->body_params->{'name'};
+    my $d = "DBI:mysql:RemainderMemo";
+    my $u = "remainderuser";
+    my $p = "remainderpass";
+    
+    #Connect database;
+    my $dbh = DBI->connect($d,$u,$p);
+    
+    
+}
+
 sub memo :Local {
     my ($self ,$c) = @_;
+    #### Edit memo in form.htm.
+    my $memoedit = $c->request->body_params->{'memoedit'};
+    # Update memo
+    #sql
+    
     #$c->stash->{list} = [$c->model('CatalDB::Book')->all];
     #my $memo = "";
     my $memo = $c->request->body_params->{'memo'};
