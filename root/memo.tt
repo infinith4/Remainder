@@ -21,7 +21,7 @@
 
 </head>
 <body background="./img/webtreats_stone_3.jpg">
-
+<p id="item">aaa</p>
 <script type="text/javascript" src="./js/jquery.tooltip.js/jquery.tooltip.js"></script>
 
 <div class="navbar">
@@ -275,17 +275,12 @@
             </p>
             
               <pre>
-              <p>
+              <p id="item">
                 
                 [% item.id | html %]<br>
                 [% item.memo | html %]
               </p>
               <div id="mailbutton">
-                <script type="text/javascript">
-                  x = new Array();
-                  x[0] = [% item.memo | html %];
-                
-                </script>
                 <a href="javascript:showform('[% item.id | html %]','[% item.memo | html %]')">
                   
                   <img src="img/nav_mail.png" width="130" height="40" alt="MAIL" />

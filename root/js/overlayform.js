@@ -19,6 +19,13 @@ var separator = ", ";
 //確認画面を表示中かどうかのフラグ
 var isConfirm;
 
+var memo = "aa";
+
+strobj = document.getElementsByTagName("p").innerHTML;
+
+var item = $("#item",$(this));
+$(item).text("aadsaa");
+//alert(strobj);
 /*======================================================
 ドキュメント読み込み後の処理
 ======================================================*/
@@ -30,12 +37,10 @@ $(document).ready(function(){
 /*======================================================
 オーバーレイフォームを開く
 ======================================================*/
-function showform(memoid,memo){
+function showform(memoid,memocontent){
 	//alert(memoid + memo);
 	//var editdocument = document.createElement(file);
-	var elmmemo = this.getElementsByTagName("textarea");
-	var str = this.createTextNode(memo);
-	elmmemo[0].appendChild(str);
+    
 	//確認画面表示中フラグをfalseに
 	isConfirm = false;
 
@@ -98,7 +103,8 @@ function onLoaded(){
   	//ボタンエリアに「normal」クラスを追加し、ボタンのラベルを書き変える
 	$("div.buttonArea", $(this))
 		.addClass("normal")
-		.find('button').html("送信内容を確認");
+		.find('button').html("送信内容を確認a");
+	
 
 	//読み込んだフォームのCSSを設定（画面下に配置）
 	$(this).css("position", "absolute")
@@ -107,6 +113,10 @@ function onLoaded(){
 
 	//画面下からフレームインする
 	$(this).animate(centerposition(this),1000,"easeOutExpo");
+    
+    $("#memo").text("aaa");
+    
+	
 }
 
 /*======================================================
@@ -194,7 +204,7 @@ function confirm(){
 				//それ以外
 				valueStr = $(this).val();
 			}
-
+            
 			//フォームのタイプによる処理分岐
 			//フォームの要素を隠してvalueをp要素として配置
 			if($(this).attr("type") == "radio") {
