@@ -410,6 +410,15 @@ sub remainder :Local {
    
 }
 
+sub signin :Local{
+    my ($self,$c) = @_;
+
+    if($c->req->method eq 'POST'){
+        my $username = $c->request->body_params->{'username'};
+        my $password = $c->request->body_params->{'editedmemo'};
+        my $editedmemo = $c->request->body_params->{'editedmemo'};
+    }
+}
 
 sub memo :Local {
     my ($self ,$c) = @_;
