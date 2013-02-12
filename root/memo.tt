@@ -280,6 +280,7 @@
                 [% item.id | html %]<br>
                 [% item.memo | html %]
               </p>
+              <a href="/memoedit/[% item.id %]">編集</a>
               <div id="mailbutton">
                 <a href="javascript:showform('[% item.id | html %]','[% item.memo | html %]')">
                   

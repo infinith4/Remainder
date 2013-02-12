@@ -410,18 +410,6 @@ sub remainder :Local {
    
 }
 
-sub memoedit :Private {
-    my ($self,$c) = @_;
-    my @days = $c->request->body_params->{'name'};
-    my $d = "DBI:mysql:RemainderMemo";
-    my $u = "remainderuser";
-    my $p = "remainderpass";
-    
-    #Connect database;
-    my $dbh = DBI->connect($d,$u,$p);
-    
-    
-}
 
 sub memo :Local {
     my ($self ,$c) = @_;
@@ -460,7 +448,7 @@ sub memo :Local {
     my $fromtime = $fromyear."-".$frommonth."-".$fromday." ".$fromhour.":".$frommin.":00";
     my $totime = $toyear."-".$tomonth."-".$today." ".$fromhour.":".$frommin.":00";
     #data source
-    my $d = "DBI:mysql:RemaidnerMemo";
+    my $d = "DBI:mysql:RemainderMemo";
     my $u = "remainderuser";
     my $p = "remainderpass";
     
@@ -495,6 +483,7 @@ sub memo :Local {
     }
 
     $c->model('RemainderDB')->storage->debug(1);
+    #mysql からmemoを取得し、.ttへ渡す
     $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')->all];
     #$c->response->body('success')
 

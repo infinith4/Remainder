@@ -1,0 +1,43 @@
+<html>
+
+<body>
+[% id %]
+<form method="POST" action="/memoedit/[% id %]">
+<textarea class="input-xlarge" name="editedmemo" id="textarea" rows="5" cols="320">
+[% editmemo.memo | html %]
+</textarea>
+</div>
+<div class="controls" align="right">                              
+<button type="submit" class="btn btn-danger"><i class="icon-envelope icon-white" style="margin-top: 1px;"></i>保存</button>
+<button type="reset" class="btn btn-inverse"><i class="icon-remove icon-white" style="margin-top: 1px;"></i>破棄</button>
+</div>
+
+[% FOREACH item = remaindermemo %]
+            <div class="well well-small">
+            <input type="checkbox">
+            <p align="right">
+              &nbsp;<button class="close">&times;</button>
+            </p>
+            
+              <pre>
+              <p id="item">
+                
+                [% item.id | html %]<br>
+                [% item.memo | html %]
+              </p>
+              <div id="mailbutton">
+               
+                  
+                  <img src="img/nav_mail.png" width="130" height="40" alt="MAIL" />
+                </a>
+              </div>
+             </pre>
+
+
+              <!-- <td><font color="#d0d0d0">|</font>   [% item.days | html %]</td> -->
+            </div>
+            
+
+            [% END %]
+</body>
+</html>

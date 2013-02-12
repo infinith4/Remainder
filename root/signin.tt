@@ -1,0 +1,17 @@
+<html>
+
+<head>
+
+</head>
+<body>
+<form method="POST" name="" class="navbar-form pull-left"><br>
+ユーザ名:
+<input type="text" name="uid" size="15" class="span2"/>
+パスワード：
+<input type="password" name="passwd" size="15" />
+Email:
+<input type="text" name="uemail" size="50" />
+<input type="submit" class="btn" value="確認" />
+</form>
+</body>
+</html>
