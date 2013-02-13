@@ -23,6 +23,7 @@ use XML::FeedPP;
 
 use POSIX;
 
+use Digest::MD5 qw/md5_hex/;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -413,15 +414,31 @@ sub remainder :Local {
 sub signin :Local{
     my ($self,$c) = @_;
 
+    
     if($c->req->method eq 'POST'){
-        my $username = $c->request->body_params->{'username'};
-        my $password = $c->request->body_params->{'editedmemo'};
-        my $editedmemo = $c->request->body_params->{'editedmemo'};
+        my $uid = $c->request->body_params->{'uid'};
+        my $passwd = $c->request->params->{'passwd'};
+        my $unam = $c->request->body_params->{'unam'};
+        my $uemail = $c->request->body_params->{'uemail'};
+
+        my $signin = $c->model('RemainderDB::usr')->create({
+            uid => $uid,
+            passwd => md5_hex($passwd),
+            unam => $unam,
+            uemail => $uemail
+        });
+        if($signin->in_storage){
+            $c->response->redirect("/index");
+            #$c->response->body("okok$editedmemo");
+        }
+
     }
 }
 
+
 sub memo :Local {
     my ($self ,$c) = @_;
+    
     #### Edit memo in form.htm.
     my $memoedit = $c->request->body_params->{'memoedit'};
     # Update memo
@@ -474,23 +491,24 @@ sub memo :Local {
     #Create for new login user.
     
     
-    if($memo ne ''){
-        
-        my $row = $c->model('RemainderDB::RemainderMemo')->create({
-            userid => 'tashirohiro4',
-            memo => $memo,
-            #weektimes => $weektimes,
-            tag => '',
-            fromtime => "$fromtime",
-            totime => "$totime",
-            days => "$daystext",
-            notification => $notification,
-            #created => 'NOW()',
-            #updated => 'NOW()',
-        });
-        
+    if($c->req->method eq 'POST'){
+        if($memo ne ''){
+            
+            my $row = $c->model('RemainderDB::RemainderMemo')->create({
+                userid => 'tashirohiro4',
+                memo => $memo,
+                #weektimes => $weektimes,
+                tag => '',
+                fromtime => "$fromtime",
+                totime => "$totime",
+                days => "$daystext",
+                notification => $notification,
+                #created => 'NOW()',
+                #updated => 'NOW()',
+                                                                      });
+            
+        }
     }
-
     $c->model('RemainderDB')->storage->debug(1);
     #mysql からmemoを取得し、.ttへ渡す
     $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')->all];

@@ -50,17 +50,19 @@ DROP TABLE IF EXISTS `usr`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `usr` (
-  `uid` varchar(10) NOT NULL, /* */
+  `id` int(100) NOT NULL AUTO_INCREMENT, /* 自動でインクリメントされる */
+  `uid` varchar(50),    /* */
   `passwd` char(32) NOT NULL, /* */
   `unam` varchar(50),    /* */
+  `uemail` varchar(100) NOT NULL,
   `roles` varchar(20) NOT NULL, /* */
-  PRIMARY KEY (`uid`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `usr` WRITE;
 /*!40000 ALTER TABLE `usr` DISABLE KEYS */;
 
-INSERT INTO `usr` VALUES ('nkakeya','827ccb0eea8a706c4c34a16891f84e7b','掛谷奈美','member'),('tsuzuki','827ccb0eea8a706c4c34a16891f84e7b','鈴木太郎','admin'),('yyamada','827ccb0eea8a706c4c34a16891f84e7b','山田祥寛','admin,member');
+INSERT INTO `usr` VALUES ('1','infinith4','827ccb0eea8a706c4c34a16891f84e7b','田代 浩','infinith4@gmail.com','admin,member'),('2','tsuzuki','827ccb0eea8a706c4c34a16891f84e7b','鈴木太郎','infinity.th4@gmail.com','admin');
 
 /*!40000 ALTER TABLE `usr` ENABLE KEYS */;
 

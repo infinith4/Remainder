@@ -4,14 +4,19 @@
 
 </head>
 <body>
-<form method="POST" name="" class="navbar-form pull-left"><br>
+<form method="POST" action="/signin"><br>
+<font color="#fff000">*</font>
 ユーザ名:
 <input type="text" name="uid" size="15" class="span2"/>
+<font color="#fff000">*</font>
 パスワード：
 <input type="password" name="passwd" size="15" />
+お名前:
+<font color="#fff000">*</font>
 Email:
 <input type="text" name="uemail" size="50" />
-<input type="submit" class="btn" value="確認" />
+<input type="submit" class="btn" value="新規登録" />
 </form>
+<font color="#fff000">*</font>は,必須
 </body>
 </html>

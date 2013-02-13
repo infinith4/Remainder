@@ -38,11 +38,17 @@ __PACKAGE__->table("usr");
 
 =head1 ACCESSORS
 
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
 =head2 uid
 
   data_type: 'varchar'
-  is_nullable: 0
-  size: 10
+  is_nullable: 1
+  size: 50
 
 =head2 passwd
 
@@ -56,6 +62,12 @@ __PACKAGE__->table("usr");
   is_nullable: 1
   size: 50
 
+=head2 uemail
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 100
+
 =head2 roles
 
   data_type: 'varchar'
@@ -65,12 +77,16 @@ __PACKAGE__->table("usr");
 =cut
 
 __PACKAGE__->add_columns(
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "uid",
-  { data_type => "varchar", is_nullable => 0, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 50 },
   "passwd",
   { data_type => "char", is_nullable => 0, size => 32 },
   "unam",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "uemail",
+  { data_type => "varchar", is_nullable => 0, size => 100 },
   "roles",
   { data_type => "varchar", is_nullable => 0, size => 20 },
 );
@@ -79,17 +95,17 @@ __PACKAGE__->add_columns(
 
 =over 4
 
-=item * L</uid>
+=item * L</id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("uid");
+__PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-01-31 17:33:19
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X/rjMi47H0CKZyVCILb9bw
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-14 03:25:46
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FULR3Gt63FYB+ZLm9HKNXw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
