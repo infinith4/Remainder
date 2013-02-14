@@ -16,7 +16,7 @@
     <a class="brand" href="#">Remainder</a>
     <ul class="nav">
       <li class="active"><a href="index">Home</a></li>
-      <li><a href="#"><i class="icon-off"></i>Sign in</a></li>
+      <li><a href="signin"><i class="icon-off"></i>Sign in</a></li>
 <!--      
 <form class="navbar-form pull-left">
   <input type="text" class="span2">

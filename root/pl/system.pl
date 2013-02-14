@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+#This script is send mail from DB.
 
 my @command = ('perl', 'schedule_sendmail.pl');
 

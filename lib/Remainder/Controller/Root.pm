@@ -219,7 +219,7 @@ sub logout : Local {
 #全認証
 sub auto : Private {
     my ($self, $c) = @_;
-    if ($c->action->reverse eq 'index') { return 1; }
+    if ($c->action->reverse eq 'index' || $c->action->reverse eq 'signin') { return 1; }
     
     if (!$c->user_exists) {
         $c->response->redirect($c->uri_for('/index'));
@@ -508,6 +508,7 @@ sub memo :Local {
                                                                       });
             
         }
+        $c->response->redirect("/memo");
     }
     $c->model('RemainderDB')->storage->debug(1);
     #mysql からmemoを取得し、.ttへ渡す

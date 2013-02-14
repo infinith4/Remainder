@@ -97,6 +97,7 @@ sub hourmin_entry{
         foreach(@memos){
                 $content = $content.$_."\n";
         }
+        $content = decode('UTF-8',$content); #encode だと文字化けする
         #print $content,"\n";
         for(my $i =0;$i < $hoursnum;$i++){
         
