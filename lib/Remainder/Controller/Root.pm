@@ -495,7 +495,7 @@ sub memo :Local {
         if($memo ne ''){
             
             my $row = $c->model('RemainderDB::RemainderMemo')->create({
-                userid => 'tashirohiro4',
+                userid => $c->request->params->{uid},
                 memo => $memo,
                 #weektimes => $weektimes,
                 tag => '',

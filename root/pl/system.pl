@@ -11,6 +11,6 @@ while(1){
     if ($ret != 0) {
         print "code[$ret]\n";
     }
-    sleep(60);
+    sleep(59);
 }
 
