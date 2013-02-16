@@ -149,7 +149,9 @@ sub hourmin_entry{
 }
 
 
+#どうやって取得するか？
 my $userid ="tashirohiro4";#given
+
 my $usermail = "infinith4\@gmail.com";#given
 my $subject = "[test] Remainder";
 #my @memos = ("memo1","memo2","memo3");
