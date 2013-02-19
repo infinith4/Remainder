@@ -48,7 +48,9 @@ if(!$sth->execute){
 
 #my $time = "2012-12-02 11:49:00";
 
-my (@hours,@mins,@userids,@memos,@unams,@uemails);
+my @hours = ();
+my @mins = ();
+
 #sendmailするレコードの時間を取得(このとり方は幼稚で,全部取ってくる必要は無く1日で送るべきレコードを取得するなど工夫する)
 while (my @rec = $sth->fetchrow_array) {
     my $fromtime = $rec[2];
@@ -60,23 +62,16 @@ while (my @rec = $sth->fetchrow_array) {
     push(@hours,$arr[0]);
     push(@mins,$arr[1]);
 
-    push(@userids,$rec[0]);
-
-    my $memo = encode('UTF-8', $rec[1]);
-    print "memo:",$memo,"\n";
-    push(@memos,$memo);
-
-    push(@uemails,$rec[6]);
     #push(@memos,$rec[2]);
 }
 
+my @memos = ();
 #現在時間取得
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
 print "current time:$hour:$min\n";
 #現在時間と等しくなるようなレコードを取得する
 #これも、一度DBから取得したようなレコードがあるのだから修正する
-=pod
 my $sthtime = $db->prepare("select id,userid, memo from RemainderMemo WHERE DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00'");
 $sthtime->execute;
 
@@ -90,7 +85,6 @@ foreach(@memos){
     my $str = encode('UTF-8', $_);
     print "str:",$_,"\n";
 }
-=cut
 
 =pod
 #DB から取得されるべき値
@@ -110,29 +104,27 @@ sub hourmin_entry{
     }
     my $frommail = "remainder.information\@gmail.com";
     my $frommailpassword = "ol12dcdbl0jse1l"; #secret
-    #userdata は,ハッシュのリファレンスで渡している %userdata = ( userids => @userids, usermails => @uemails, subject => $subject)
-    #複数人に対して、メールを送信する
-#    while(1){
 
-            my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
-            #my $hour = $dt->hour(),"\n";
-            #my $min = $dt->minute(),"\n";
-            print "currenttime:",$dt,"\n";
-            
-            my $content = "";
-            foreach(@memos){
+#    while(1){
+        my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
+        #my $hour = $dt->hour(),"\n";
+        #my $min = $dt->minute(),"\n";
+        print "currenttime:",$dt,"\n";
+        
+        my $content = "";
+        foreach(@memos){
                 $content = $content.$_."\n";
-            }
-            $content = decode('UTF-8',$content); #encode だと文字化けする
-            #print $content,"\n";
-            for(my $i =0;$i < $hoursnum;$i++){
-                
+        }
+        $content = decode('UTF-8',$content); #encode だと文字化けする
+        #print $content,"\n";
+        for(my $i =0;$i < $hoursnum;$i++){
+        
                 if(($$hours[$i] == $dt->hour()) && ($$mins[$i] == $dt->minute()) ){
                     #$func;
                     #last;
 
                     #sendmailjob
-                    print "Sendmail:\n";
+                    print "sendmail\n";
                     print $$userdata{userid},"\n";
                     my $mailcontent = "$$userdata{userid} さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
 
@@ -159,25 +151,28 @@ sub hourmin_entry{
 
                 }
                 
-            }
-            #sleep(60);
+        }
+        #sleep(60);
 #    }
-
+    
 }
 
+
+#どうやって取得するか？
+my $userid ="tashirohiro4";#given
+
+my $usermail = "infinith4\@gmail.com";#given
 my $subject = "[test] Remainder";
+#my @memos = ("memo1","memo2","memo3");
 
-my $userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
-for (my $i = 0;$i<$cnt;$i++){
-    my $onehash = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
-    &hourmin_entry(\@hours,\@mins,\%userdata,@memos);
-}
+
+
+my %userdata = ( userid => $userid, usermail => $usermail, subject => $subject);
+
 #if文が適用されていない
-foreach my $key (sort keys %$userdatas) {
-    foreach my $aryelm (@{$userdatas->{$key}}){
-        &hourmin_entry(\@hours,\@mins,\%userdata,@memos);
-    }
-}
+
+&hourmin_entry(\@hours,\@mins,\%userdata,@memos);
+
 #1;
 
 
