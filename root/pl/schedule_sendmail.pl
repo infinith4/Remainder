@@ -48,7 +48,7 @@ if(!$sth->execute){
 
 #my $time = "2012-12-02 11:49:00";
 
-my (@hours,@mins,@userids,@memos,@unams,@uemails);
+my @hours;my @mins;my @userids;my @memos;my @unams;my @uemails;
 #sendmailするレコードの時間を取得(このとり方は幼稚で,全部取ってくる必要は無く1日で送るべきレコードを取得するなど工夫する)
 while (my @rec = $sth->fetchrow_array) {
     my $fromtime = $rec[2];
@@ -166,12 +166,16 @@ sub hourmin_entry{
 }
 
 my $subject = "[test] Remainder";
-
+my $cnt = @userids;
 my $userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
+my $userids = \@userids;
+my $uemails = \@uemails;
 for (my $i = 0;$i<$cnt;$i++){
-    my $onehash = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
-    &hourmin_entry(\@hours,\@mins,\%userdata,@memos);
+    my $userdata = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
+    &hourmin_entry(\@hours,\@mins,$userdata,@memos);
 }
+
+=pod
 #if文が適用されていない
 foreach my $key (sort keys %$userdatas) {
     foreach my $aryelm (@{$userdatas->{$key}}){
@@ -179,7 +183,7 @@ foreach my $key (sort keys %$userdatas) {
     }
 }
 #1;
-
+=cut
 
 # ステートメントハンドルオブジェクトを閉じる
 $sth->finish;

@@ -59,7 +59,7 @@ sub index :Local {
     #user name,passwordを入力時のみ認証処理を実行
     if(defined($uid) && defined($passwd)){
         #user name,passwordで認証
-        if($c->authenticate({ uid => $uid ,passwd => $passwd })){
+        if($c->authenticate({ userid => $uid ,passwd => $passwd })){
             #認証成功
             
             $c->response->redirect("/memo");
@@ -416,13 +416,13 @@ sub signin :Local{
 
     
     if($c->req->method eq 'POST'){
-        my $uid = $c->request->body_params->{'uid'};
+        my $userid = $c->request->body_params->{'uid'};
         my $passwd = $c->request->params->{'passwd'};
         my $unam = $c->request->body_params->{'unam'};
         my $uemail = $c->request->body_params->{'uemail'};
 
-        my $signin = $c->model('RemainderDB::usr')->create({
-            uid => $uid,
+        my $signin = $c->model('RemainderDB::User')->create({
+            userid => $userid,
             passwd => md5_hex($passwd),
             unam => $unam,
             uemail => $uemail
@@ -495,7 +495,7 @@ sub memo :Local {
         if($memo ne ''){
             
             my $row = $c->model('RemainderDB::RemainderMemo')->create({
-                userid => $c->request->params->{uid},
+                userid => "tsuzuki",#loginしているuseridにする"infinith4",# ここおかしい $c->request->params->{uid},
                 memo => $memo,
                 #weektimes => $weektimes,
                 tag => '',

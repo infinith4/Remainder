@@ -69,7 +69,7 @@ __PACKAGE__->config(
             },
             store => {
                 class => 'DBIx::Class',
-                user_model => 'RemainderDB::Usr',
+                user_model => 'RemainderDB::User',
                 use_userdata_from_session => 1,
                 role_relation => 'roles',
                 role_field => 'role',
