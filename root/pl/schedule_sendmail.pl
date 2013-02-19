@@ -50,6 +50,8 @@ if(!$sth->execute){
 
 my @hours;my @mins;my @userids;my @memos;my @unams;my @uemails;
 #sendmailするレコードの時間を取得(このとり方は幼稚で,全部取ってくる必要は無く1日で送るべきレコードを取得するなど工夫する)
+
+
 while (my @rec = $sth->fetchrow_array) {
     my $fromtime = $rec[2];
     print "fromtime:",$fromtime,"\n";
@@ -69,6 +71,27 @@ while (my @rec = $sth->fetchrow_array) {
     push(@uemails,$rec[6]);
     #push(@memos,$rec[2]);
 }
+
+#送信するデータ数
+my $cnt = @umemo;
+my %docdatas = ();
+my @memonum = ();
+
+#memoの数の分だけ番号をつける(ドキュメント(doc)と呼ぶ)
+for(my $i=0;$i < $cnt ;$i++){
+    push(@doclabel,"doc".$i);
+}
+
+#docごとに,labelをつける
+my %doc = ("id" => "","userid" => "" ,"uemail" => "","memo"=> "","hour"=> "","min" => "");
+
+
+for ($i = 0;$i < $cnt ;$i++){
+    $docdatas{'$doclabel'} = %doc; 
+
+}
+
+print Dumper %docdatas;
 
 #現在時間取得
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
@@ -105,7 +128,7 @@ my $hoursnum = scalar(@hours);
 
 #時,分,%userdata(userid,useremail,subject),memoが与えられたら,その内容に応じて,特定のuserに送信する
 sub hourmin_entry{
-    my ($hours,$mins,$userdata,@memos) = @_;
+    my ($hours,$mins,$userdatas,@memos) = @_;
     
     for (my $i=0;$i<$hoursnum;$i++){
             print "select time is ",$$hours[$i],$$mins[$i],"\n";
@@ -114,11 +137,8 @@ sub hourmin_entry{
     my $frommailpassword = "ol12dcdbl0jse1l"; #secret
     #userdata は,ハッシュのリファレンスで渡している %userdata = ( userids => @userids, usermails => @uemails, subject => $subject)
     #複数人に対して、メールを送信する
-#    while(1){
 
             my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
-            #my $hour = $dt->hour(),"\n";
-            #my $min = $dt->minute(),"\n";
             print "currenttime:",$dt,"\n";
             
             my $content = "";
@@ -130,55 +150,55 @@ sub hourmin_entry{
             #print $content,"\n";
             #原因これ？
             for(my $i =0;$i < $hoursnum;$i++){
-                
+                #現在の時刻が登録された時間に等しければ、送信。
                 if(($$hours[$i] == $dt->hour()) && ($$mins[$i] == $dt->minute()) ){
-                    #$func;
-                    #last;
+                    my $cnt = $userdatas->{userids};
+                    print "$cnt\n";
+                    #$userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
+                    
+                    
+#                        my $userdata = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
+                        
+                        #$func;
+                        #last;
+                        #sendmailjob
+                        print "Sendmail:\n";
+                        print "to:",${$userdatas->{userid}}[$i],"\n";
+                        my $mailcontent = " さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
 
-                    #sendmailjob
-                    print "Sendmail:\n";
-                    print $$userdata{userid},"\n";
-                    my $mailcontent = "$$userdata{userid} さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
+                        #print $$hash{userid},"\n";
+                        #mail 送信
+                        my $email = Email::Simple->create(
+                            header => [
+                                From    => '"Mail Remainder"'." <".$frommail.">",
+                                To      => ${$userdatas->{userid}}[$i]."さん"." <".${$userdatas->{usermails}}[$i].">",#given
+                                Subject => "???",#given
+                            ],
+                            body => "$mailcontent",#given
+                            );
 
-                    #print $$hash{userid},"\n";
-                    #mail 送信
-                    my $email = Email::Simple->create(
-                        header => [
-                            From    => '"Mail Remainder"'." <".$frommail.">",
-                            To      => $$userdata{userid}."さん"." <".$$userdata{usermail}.">",#given
-                            Subject => "$$userdata{subject}",#given
-                        ],
-                        body => "$mailcontent",#given
-                        );
+                        my $transport = Email::Sender::Transport::SMTP->new({
+                            ssl  => 1,
+                            host => 'smtp.gmail.com',
+                            port => 465,
+                            sasl_username => $frommail,
+                            sasl_password => $frommailpassword
+                                                                            });
+                        eval { sendmail($email, { transport => $transport }); };             
+                        if ($@) { warn $@ }
 
-                    my $transport = Email::Sender::Transport::SMTP->new({
-                        ssl  => 1,
-                        host => 'smtp.gmail.com',
-                        port => 465,
-                        sasl_username => $frommail,
-                        sasl_password => $frommailpassword
-                                                                        });
-                    eval { sendmail($email, { transport => $transport }); };             
-                    if ($@) { warn $@ }
-
-                }
+                    }
                 
-            }
+                }
             #sleep(60);
-#    }
+    }
 
-}
+
 
 my $subject = "[test] Remainder";
-my $cnt = @userids;
 my $userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
-my $userids = \@userids;
-my $uemails = \@uemails;
-for (my $i = 0;$i<$cnt;$i++){
-    my $userdata = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
-    &hourmin_entry(\@hours,\@mins,$userdata,@memos);
-}
-
+&hourmin_entry(\@hours,\@mins,$userdatas,@memos);
+               
 =pod
 #if文が適用されていない
 foreach my $key (sort keys %$userdatas) {

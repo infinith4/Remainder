@@ -16,12 +16,15 @@ my %hash = ('ary01' => @ary01 ,'ary02' => @ary02);
 
 my $cnt = @ary01;
 
+=pod
 for (my $i = 0;$i<$cnt;$i++){
     my $onehash = { 'ary01s' => $ary01s->[$i],'ary02s' => $ary02s->[$i] };
     print Dumper $onehash;
 
     entry($onehash);
 }
+=cut
+
 =pod
 print Dumper $onehash;
 
@@ -30,18 +33,19 @@ print %$onehash,"\n";
 #print "hashs{ary01s}[0]:$hashs->{ary01s}[1]\n";
 =cut
 sub entry{
-    my ($hash) = @_;
+    my ($hashs) = @_;
     print "all hash elements.\n";
     
-    foreach my $key (sort keys %$hash){
+    foreach my $key (sort keys %$hashs){
         print "key:$key\n";
-        foreach ($hash->{$key}){
+        foreach (@{$hashs->{$key}}){
             print $_,"\n";
+            #
         }
     }
 }
 
-#entry($onehash);
+entry($hashs);
 
 =pod
 print "all hash elements.\n";
