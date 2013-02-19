@@ -518,7 +518,7 @@ sub memo :Local {
     #print $day;
     #$c->stash->{day} = join ',',@$day;
     #現在の日付(時間ふくむ)
-    $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
+    my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
     $c->stash->{datetimenow} = $dt;
     my  $day_abbr    = $dt->day_abbr;   # 曜日の省略名
     $c->stash->{datetimeweekly} = $day_abbr;

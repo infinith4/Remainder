@@ -99,6 +99,8 @@ my @hours = (5,5,9);
 my @mins = (36,37,28);
 =cut
 
+#@hoursは,送信する時間.
+
 my $hoursnum = scalar(@hours);
 
 #時,分,%userdata(userid,useremail,subject),memoが与えられたら,その内容に応じて,特定のuserに送信する
@@ -120,11 +122,13 @@ sub hourmin_entry{
             print "currenttime:",$dt,"\n";
             
             my $content = "";
+            
             foreach(@memos){
-                $content = $content.$_."\n";
+                $content = $_."\n";
             }
             $content = decode('UTF-8',$content); #encode だと文字化けする
             #print $content,"\n";
+            #原因これ？
             for(my $i =0;$i < $hoursnum;$i++){
                 
                 if(($$hours[$i] == $dt->hour()) && ($$mins[$i] == $dt->minute()) ){
