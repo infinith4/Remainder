@@ -33,7 +33,8 @@ $db->do("set names utf8");
 # SQL文を用意
 #                              0   1      2    3    4        5     6
 #my $sth = $db->prepare("SELECT id,userid,memo,tag,fromtime,totime,days FROM RemainderMemo WHERE '$dtnow' >= fromtime and days like '%$dayabbr%' ORDER BY fromtime asc"); #fromtime でソート.現在以前
-my $sth = $db->prepare("SELECT id,userid,memo,tag,fromtime,totime,days FROM RemainderMemo WHERE '$dtnow' >= fromtime AND '$dtnow' <= totime ORDER BY fromtime asc"); #fromtime でソート.現在以前
+#$dtnow:現在時間がfromtime-totimeの間に入っているレコードを取得
+my $sth = $db->prepare("SELECT userid,memo,fromtime,totime,days,unam,uemail FROM RemainderMemo INNER JOIN User Using (userid) WHERE ('$dtnow' <= fromtime AND fromtime <= '$dt_plus1min') OR (fromtime <= '$dtnow' AND '$dt_plus1min' <=totime) OR ('$dtnow' <= totime AND totime <= '$dt_plus1min') ORDER BY fromtime"); #fromtime でソート.現在以前
 
 if(!$sth->execute){
     print "SQL失敗\n";
@@ -45,16 +46,14 @@ if(!$sth->execute){
 my @hours = ();
 my @mins = ();
 
+#sendmailするレコードの時間を取得(このとり方は幼稚で,全部取ってくる必要は無く1日で送るべきレコードを取得するなど工夫する)
 while (my @rec = $sth->fetchrow_array) {
     my $fromtime = $rec[4];
     print "fromtime:",$fromtime,"\n";
     $fromtime =~ m/\s/;
     my $hourminsec = "$'";
-
     print "hourminsec:",$hourminsec,"\n";
-
     my @arr =split(/:/,$hourminsec);
-
     push(@hours,$arr[0]);
     push(@mins,$arr[1]);
 
@@ -62,11 +61,15 @@ while (my @rec = $sth->fetchrow_array) {
 }
 
 my @memos = ();
+#現在時間取得
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
 print "current time:$hour:$min\n";
+#現在時間と等しくなるようなレコードを取得する
+#これも、一度DBから取得したようなレコードがあるのだから修正する
 my $sthtime = $db->prepare("select id,userid, memo from RemainderMemo WHERE DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00'");
 $sthtime->execute;
+
 while (my @rectime = $sthtime->fetchrow_array) {
     
     push(@memos,$rectime[2]);
@@ -87,14 +90,15 @@ my @mins = (36,37,28);
 
 my $hoursnum = scalar(@hours);
 
+#時,分,%userdata(userid,useremail,subject),memoが与えられたら,その内容に応じて,特定のuserに送信する
 sub hourmin_entry{
-    my ($hours,$mins,$hash,@memos) = @_;
+    my ($hours,$mins,$userdata,@memos) = @_;
     
     for (my $i=0;$i<$hoursnum;$i++){
             print "select time is ",$$hours[$i],$$mins[$i],"\n";
     }
     my $frommail = "remainder.information\@gmail.com";
-    my $frommailpassword = "ol12dcdbl0jse1l";
+    my $frommailpassword = "ol12dcdbl0jse1l"; #secret
 
 #    while(1){
         my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
@@ -116,7 +120,7 @@ sub hourmin_entry{
 
                     #sendmailjob
                     print "sendmail\n";
-                    print $$hash{userid},"\n";
+                    print $$userdata{userid},"\n";
                     my $mailcontent = "$$hash{userid} さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
 
                     #print $$hash{userid},"\n";
@@ -124,8 +128,8 @@ sub hourmin_entry{
                     my $email = Email::Simple->create(
                         header => [
                             From    => '"Mail Remainder"'." <".$frommail.">",
-                            To      => $$hash{userid}."さん"." <".$$hash{usermail}.">",#given
-                            Subject => "$$hash{subject}",#given
+                            To      => $$userdata{userid}."さん"." <".$$userdata{usermail}.">",#given
+                            Subject => "$$userdata{subject}",#given
                         ],
                         body => "$mailcontent",#given
                         );
@@ -158,11 +162,11 @@ my $subject = "[test] Remainder";
 
 
 
-my %hash = ( userid => $userid, usermail => $usermail, subject => $subject);
+my %userdata = ( userid => $userid, usermail => $usermail, subject => $subject);
 
 #if文が適用されていない
 
-&hourmin_entry(\@hours,\@mins,\%hash,@memos);
+&hourmin_entry(\@hours,\@mins,\%userdata,@memos);
 
 #1;
 

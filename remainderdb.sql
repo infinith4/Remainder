@@ -37,21 +37,21 @@ CREATE TABLE `RemainderMemo` (
 LOCK TABLES `RemainderMemo` WRITE;
 /*!40000 ALTER TABLE `RemainderMemo` DISABLE KEYS */;
 INSERT INTO `RemainderMemo` VALUES 
-('1','tashirohiro4','3ステップで学ぶ MySQL入門','ほしい物,mysql,web開発','0','2012-12-01 22:20:00','2012-12-12 22:33:00','Sun,Mon,Wed,Sat','mail','2','2012-12-01 22:23:00','2012-12-01 22:23:00'),
+('1','tsuzuki','3ステップで学ぶ MySQL入門','ほしい物,mysql,web開発','0','2012-12-11 22:20:00','2012-12-12 22:33:00','Sun,Mon,Wed,Sat','mail','2','2012-12-01 22:23:00','2012-12-01 22:23:00'),
 ('2','tashirohiro4','perl入門','ほしい物,perl,web開発','0','2012-12-02 00:20:00','2012-12-19 22:33:00','Sun,Mon,Wed','mail','2','2012-12-02 22:23:00','2012-12-02 22:23:00'),
-('3','tashirohiro4','XML入門','ほしい物,web開発','0','2012-12-02 01:22:00','2012-12-19 22:33:00','Sun,Tue,Wed,Sat','mail','2','2012-12-02 01:23:00','2012-12-02 01:23:00'),
-('4','tashirohiro4','mysql入門','ほしい物,mysql,web開発','0','2012-12-02 02:12:00','2012-12-21 20:33:00','Sun,Mon,Wed','mail','2','2012-12-02 02:23:00','2012-12-02 02:23:00'),
-('5','tashirohiro4','Apache入門','web開発,apache,server,ほしい物','0','2012-12-03 20:20:00','2012-12-19 22:33:00','Sun,Thu','mail','2','2012-12-03 20:23:00','2012-12-03 20:23:00');
+('3','tsuzuki','XML入門','ほしい物,web開発','0','2012-12-02 01:22:00','2012-12-19 22:33:00','Sun,Tue,Wed,Sat','mail','2','2012-12-02 01:23:00','2012-12-02 01:23:00'),
+('4','infinith4','mysql入門','ほしい物,mysql,web開発','0','2012-12-02 02:12:00','2012-12-21 20:33:00','Sun,Mon,Wed','mail','2','2012-12-02 02:23:00','2012-12-02 02:23:00'),
+('5','infinith4','Apache入門','web開発,apache,server,ほしい物','0','2012-12-03 20:20:00','2012-12-19 22:33:00','Sun,Thu','mail','2','2012-12-03 20:23:00','2012-12-03 20:23:00');
 /*!40000 ALTER TABLE `RemainderMemo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
-DROP TABLE IF EXISTS `usr`;
+DROP TABLE IF EXISTS `User`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usr` (
+CREATE TABLE `User` (
   `id` int(100) NOT NULL AUTO_INCREMENT, /* 自動でインクリメントされる */
-  `uid` varchar(50),    /* */
+  `userid` varchar(50),    /* */
   `passwd` char(32) NOT NULL, /* */
   `unam` varchar(50),    /* */
   `uemail` varchar(100) NOT NULL,
@@ -59,11 +59,11 @@ CREATE TABLE `usr` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `usr` WRITE;
+LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `usr` DISABLE KEYS */;
 
-INSERT INTO `usr` VALUES ('1','infinith4','827ccb0eea8a706c4c34a16891f84e7b','田代 浩','infinith4@gmail.com','admin,member'),('2','tsuzuki','827ccb0eea8a706c4c34a16891f84e7b','鈴木太郎','infinity.th4@gmail.com','admin');
+INSERT INTO `User` VALUES ('1','infinith4','827ccb0eea8a706c4c34a16891f84e7b','田代 浩','infinith4@gmail.com','admin,member'),('2','tsuzuki','827ccb0eea8a706c4c34a16891f84e7b','鈴木太郎','infinity.th4@gmail.com','admin');
 
-/*!40000 ALTER TABLE `usr` ENABLE KEYS */;
+/*!40000 ALTER TABLE `User` ENABLE KEYS */;
 
 UNLOCK TABLES;
