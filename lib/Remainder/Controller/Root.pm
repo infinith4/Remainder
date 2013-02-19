@@ -517,21 +517,6 @@ sub memo :Local {
 
     #print $day;
     #$c->stash->{day} = join ',',@$day;
-
-    #日付を指定して生成
-    my $dt = DateTime->new(
-        time_zone => 'Asia/Tokyo',
-        year      => 2008,
-        month     => 8,
-        day       => 4,
-        hour      => 15,
-        minute    => 0,
-        second    => 0
-        );
-
-    #epochから生成
-    $dt = DateTime->from_epoch( time_zone => 'Asia/Tokyo', epoch => 1217829600 );
-    
     #現在の日付(時間ふくむ)
     $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
     $c->stash->{datetimenow} = $dt;
