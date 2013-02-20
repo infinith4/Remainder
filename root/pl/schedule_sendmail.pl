@@ -9,7 +9,7 @@ use Email::Simple::Creator;
 use Email::Sender::Transport::SMTP;
 use utf8;
 use Encode;
-
+use Data::Dumper;
 #ここまでで複数時間を指定してメールを時間に送信できる。
 
 #DBからselect してmemoと時間を指定するだけ。
@@ -26,7 +26,7 @@ my $db = DBI->connect($d, $u, $p);
 my $dtnow = DateTime->now( time_zone => 'Asia/Tokyo' );
 my $dt_plus1min = DateTime->now( time_zone => 'Asia/Tokyo' );
 $dt_plus1min->add( minutes => 1 );
-print "dtnow:$dtnow\n";
+print "\ndtnow:$dtnow\n";
 print "dt_plus1min:$dt_plus1min\n";
 
 
@@ -35,11 +35,17 @@ if(!$db){
     exit;
 }
 $db->do("set names utf8"); 
+
+my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
+my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
+print "current time:$hour:$min\n";
+
+
 # SQL文を用意
 #                              0   1      2    3    4        5     6
 #my $sth = $db->prepare("SELECT id,userid,memo,tag,fromtime,totime,days FROM RemainderMemo WHERE '$dtnow' >= fromtime and days like '%$dayabbr%' ORDER BY fromtime asc"); #fromtime でソート.現在以前
-#$dtnow:現在時間がfromtime-totimeの間に入っているレコードを取得
-my $sth = $db->prepare("SELECT userid,memo,fromtime,totime,days,unam,uemail FROM RemainderMemo INNER JOIN User Using (userid) WHERE ('$dtnow' <= fromtime AND fromtime <= '$dt_plus1min') OR (fromtime <= '$dtnow' AND '$dt_plus1min' <=totime) OR ('$dtnow' <= totime AND totime <= '$dt_plus1min') ORDER BY fromtime"); #fromtime でソート.現在以前
+#$dtnow:現在時間がfromtime-totimeの間に入っている AND 現在時間の時間とfromtimeの時間に一致するレコードを取得
+my $sth = $db->prepare("SELECT userid,memo,fromtime,totime,days,unam,uemail FROM RemainderMemo INNER JOIN User Using (userid) WHERE (('$dtnow' <= fromtime AND fromtime <= '$dt_plus1min') OR (fromtime <= '$dtnow' AND '$dt_plus1min' <=totime) OR ('$dtnow' <= totime AND totime <= '$dt_plus1min') ) AND DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00' ORDER BY fromtime"); #fromtime でソート.現在以前
 
 if(!$sth->execute){
     print "SQL失敗\n";
@@ -51,168 +57,96 @@ if(!$sth->execute){
 my @hours;my @mins;my @userids;my @memos;my @unams;my @uemails;
 #sendmailするレコードの時間を取得(このとり方は幼稚で,全部取ってくる必要は無く1日で送るべきレコードを取得するなど工夫する)
 
-
-while (my @rec = $sth->fetchrow_array) {
-    my $fromtime = $rec[2];
-    print "fromtime:",$fromtime,"\n";
-    $fromtime =~ m/\s/;
-    my $hourminsec = "$'";
-    print "hourminsec:",$hourminsec,"\n";
-    my @arr =split(/:/,$hourminsec);
-    push(@hours,$arr[0]);
-    push(@mins,$arr[1]);
-
-    push(@userids,$rec[0]);
-
-    my $memo = encode('UTF-8', $rec[1]);
-    print "memo:",$memo,"\n";
-    push(@memos,$memo);
-
-    push(@uemails,$rec[6]);
-    #push(@memos,$rec[2]);
-}
-
 #送信するデータ数
-my $cnt = @umemo;
-my %docdatas = ();
+my $cnt = @memos;
+my @docdatas = ();
 my @memonum = ();
-
+my @doclabel = ();
+=pod
 #memoの数の分だけ番号をつける(ドキュメント(doc)と呼ぶ)
 for(my $i=0;$i < $cnt ;$i++){
     push(@doclabel,"doc".$i);
 }
+=cut
+    
+while(my @rec = $sth->fetchrow_array){
+    my %doc = ("userid" => "" ,"uemail" => "","memo"=> "","hour"=> "","min" => "","fromtime"=>"","totime"=>"");
 
-#docごとに,labelをつける
-my %doc = ("id" => "","userid" => "" ,"uemail" => "","memo"=> "","hour"=> "","min" => "");
+    #print Dumper @rec;
+    #docごとに,labelをつける
+    $doc{'userid'} = $rec[0];
+    $doc{'uemail'} = $rec[6];
+    $doc{'memo'} = $rec[1];
+    $doc{'fromtime'} = $rec[2];
+    $doc{'totime'} = $rec[3];
 
-
-for ($i = 0;$i < $cnt ;$i++){
-    $docdatas{'$doclabel'} = %doc; 
+    my $fromtime = $rec[2];
+    #print "fromtime:",$fromtime,"\n";
+    $fromtime =~ m/\s/;
+    my $hourminsec = "$'";
+#   print "hourminsec:",$hourminsec,"\n";
+    my @arr =split(/:/,$hourminsec);
+    $doc{'hour'} = $arr[0];
+    $doc{'min'} = $arr[1];
+    #print "start docdatas###################\n";
+    my $doc = \%doc;
+    push(@docdatas, $doc);
+#    print Dumper @docdatas;
+    #ハッシュにハッシュを追加できないのか？
+    #print "end docdatas\n";
 
 }
 
-print Dumper %docdatas;
-
+print "Current all sendmail record:\n";
+print Dumper @docdatas;
+if(!@docdatas){
+    print "docdatas record is empty\n";
+}
+my $refdocdatas = \@docdatas;
 use Schedule::Sendmail;
-
-&sendmail()
-#現在時間取得
-my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
-my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
-print "current time:$hour:$min\n";
-#現在時間と等しくなるようなレコードを取得する
-#これも、一度DBから取得したようなレコードがあるのだから修正する
-=pod
-my $sthtime = $db->prepare("select id,userid, memo from RemainderMemo WHERE DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00'");
-$sthtime->execute;
-
-while (my @rectime = $sthtime->fetchrow_array) {
-    
-    push(@memos,$rectime[2]);
+if(!$refdocdatas){
+    &Schedule::Sendmail::sendmemo($refdocdatas);
 }
+#&sendmemo($refdocdatas);
 
-foreach(@memos){
-    # バイト文字列(外部からの入力)を内部文字列に変換($strがUTF-8の場合)
-    my $str = encode('UTF-8', $_);
-    print "str:",$_,"\n";
-}
-=cut
+sub sendmemo{
+    my ($docdatas) = shift;
 
-=pod
-#DB から取得されるべき値
-#時間は要素ごとに対応している。
-my @hours = (5,5,9);
-my @mins = (36,37,28);
-=cut
-
-#@hoursは,送信する時間.
-
-my $hoursnum = scalar(@hours);
-
-#時,分,%userdata(userid,useremail,subject),memoが与えられたら,その内容に応じて,特定のuserに送信する
-sub hourmin_entry{
-    my ($hours,$mins,$userdatas,@memos) = @_;
-    
-    for (my $i=0;$i<$hoursnum;$i++){
-            print "select time is ",$$hours[$i],$$mins[$i],"\n";
-    }
     my $frommail = "remainder.information\@gmail.com";
     my $frommailpassword = "ol12dcdbl0jse1l"; #secret
-    #userdata は,ハッシュのリファレンスで渡している %userdata = ( userids => @userids, usermails => @uemails, subject => $subject)
-    #複数人に対して、メールを送信する
+    foreach (@$docdatas){
+        print "Sendmail:\n";
+        print "to:",$_->{'userid'},"\n";
+        my $content = $_->{'memo'};
+        my $mailcontent = "$_->{'userid'} さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
 
-            my $dt = DateTime->now( time_zone => 'Asia/Tokyo' );
-            print "currenttime:",$dt,"\n";
-            
-            my $content = "";
-            
-            foreach(@memos){
-                $content = $_."\n";
-            }
-            $content = decode('UTF-8',$content); #encode だと文字化けする
-            #print $content,"\n";
-            #原因これ？
-            for(my $i =0;$i < $hoursnum;$i++){
-                #現在の時刻が登録された時間に等しければ、送信。
-                if(($$hours[$i] == $dt->hour()) && ($$mins[$i] == $dt->minute()) ){
-                    my $cnt = $userdatas->{userids};
-                    print "$cnt\n";
-                    #$userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
-                    
-                    
-#                        my $userdata = { 'userid' => $userids->[$i],'usermail' => $uemails->[$i] ,subject => $subject};
-                        
-                        #$func;
-                        #last;
-                        #sendmailjob
-                        print "Sendmail:\n";
-                        print "to:",${$userdatas->{userid}}[$i],"\n";
-                        my $mailcontent = " さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
+    #print $$hash{userid},"\n";
+    #mail 送信
+    my $email = Email::Simple->create(
+        header => [
+            From    => '"Mail Remainder"'." <".$frommail.">",
+            To      => $_->{'userid'}."さん"." <".$_->{'uemail'}.">",#given
+            Subject => "test",#given
+        ],
+        body => "$mailcontent",#given
+        );
 
-                        #print $$hash{userid},"\n";
-                        #mail 送信
-                        my $email = Email::Simple->create(
-                            header => [
-                                From    => '"Mail Remainder"'." <".$frommail.">",
-                                To      => ${$userdatas->{userid}}[$i]."さん"." <".${$userdatas->{usermails}}[$i].">",#given
-                                Subject => "???",#given
-                            ],
-                            body => "$mailcontent",#given
-                            );
-
-                        my $transport = Email::Sender::Transport::SMTP->new({
-                            ssl  => 1,
-                            host => 'smtp.gmail.com',
-                            port => 465,
-                            sasl_username => $frommail,
-                            sasl_password => $frommailpassword
-                                                                            });
-                        eval { sendmail($email, { transport => $transport }); };             
-                        if ($@) { warn $@ }
-
-                    }
-                
-                }
-            #sleep(60);
+        my $transport = Email::Sender::Transport::SMTP->new({
+        ssl  => 1,
+        host => 'smtp.gmail.com',
+        port => 465,
+        sasl_username => $frommail,
+        sasl_password => $frommailpassword
+                                                            });
+        eval { sendmail($email, { transport => $transport }); };             
+        if ($@) { warn $@ }
     }
 
-
-
-my $subject = "[test] Remainder";
-my $userdatas = { userids => \@userids, usermails => \@uemails, subject => $subject};
-&hourmin_entry(\@hours,\@mins,$userdatas,@memos);
-               
-=pod
-#if文が適用されていない
-foreach my $key (sort keys %$userdatas) {
-    foreach my $aryelm (@{$userdatas->{$key}}){
-        &hourmin_entry(\@hours,\@mins,\%userdata,@memos);
-    }
 }
-#1;
+
+=pod
+foreach  (@docdatas){
+    print $_->{'userid'},"\n"; #pushするときにリファレンスにしたから
+}
 =cut
 
-# ステートメントハンドルオブジェクトを閉じる
-$sth->finish;
-# データベースハンドルオブジェクトを閉じる
-$db->disconnect;
