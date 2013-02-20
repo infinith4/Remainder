@@ -50,8 +50,12 @@
     <script src="js/bootstrap.min.js"></script>
   <div class="hero-unit">
     <h1>Reminder</h1>
-    <p>Reminderは,あなたのちょっと気になるを定期的にお知らせします。<br>
+    <p>Reminderは,あなたのちょっと気になるを定期的にお知らせします。
+      <a class="btn btn-large btn-primary" type="button" href="/signin">新規登録</a>
+    
     </p>
+    
+    
   </div>
 <div class="container">
   <div class="row-fluid">
@@ -65,6 +69,7 @@
     <div class="span5">
       <!--Body content-->
       <div class="well">
+        Mission
       <h4>BookmarkをRemind</h4>
       HatenaBookmarkで、あとで読むタグをつけたBookmarkがたくさん溜まっていませんか？</font><br>
       そんなあなたに、Bookmarkをお知らせします。
@@ -72,11 +77,14 @@
 </div>
 </div>
 
-<br>
-<br>
-<br>
-
 </div>
+<pre>
+mission:
+・bookmark
+・OAuth
+・sendmemo関数を曜日に対応させる
+・memoeditを時間も編集できるようにする
+</pre>
 <div id="foot">
     <div class="well">
     <p >Copyright INFINITY 2012.Product by <a href="http://www.hatena.ne.jp/infinity_th4/" target="blank">Hiroshi Tashiro</a>.</p>

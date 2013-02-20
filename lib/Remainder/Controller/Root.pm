@@ -332,11 +332,12 @@ sub memo :Local {
 #    my $weektimes = $c->request->body_params->{'weektimes'};
     #my $fromtime = $c->request->body_params->{'days'};
     
-    my @days = $c->request->body_params->{'days'};
+    my $days = $c->request->body_params->{'days'};
     my $daystext = "";
-    foreach (@days){
-        $daystext = $daystext.$_;
+    foreach (@$days){
+        $daystext = $daystext.$_.",";
     } 
+    #print $daystext,"\n";
     #print $days,"\n";
     #$c->stash->{day} = join ',',@$day;
     my $notification = $c->request->body_params->{'notification'};
@@ -383,7 +384,7 @@ sub memo :Local {
                 tag => '',
                 fromtime => "$fromtime",
                 totime => "$totime",
-                days => "$daystext",
+                days => $daystext,
                 notification => $notification,
                 #created => 'NOW()',
                 #updated => 'NOW()',
