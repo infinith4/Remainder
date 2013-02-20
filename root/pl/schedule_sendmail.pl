@@ -104,9 +104,9 @@ if(!@docdatas){
 }
 my $refdocdatas = \@docdatas;
 use Schedule::Sendmail;
-if(!$refdocdatas){
+#if(!@$refdocdatas){
     &Schedule::Sendmail::sendmemo($refdocdatas);
-}
+#}
 #&sendmemo($refdocdatas);
 
 sub sendmemo{
