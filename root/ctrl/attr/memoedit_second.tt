@@ -1,18 +1,187 @@
 <html>
 
 <body>
-[% id %]
-<form method="POST" action="/memoedit/[% id %]">
-<textarea class="input-xlarge" name="editedmemo" id="textarea" rows="5" cols="320">
-[% editmemo.memo | html %]
-</textarea>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>Memo Reminder</title>
+
+    <link href="../../css/memoremainder.css" rel="stylesheet">
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../css/jquery.tagsinput.css" />
+    <link rel="stylesheet" type="text/css" href="../../js/jquery.tooltip.js/jquery.tooltip.css" />
+    
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<link href="css/exvalidation.css" rel="stylesheet" type="text/css" />
+<script src="../../js/jquery-1.6.1.min.js" language="JavaScript" type="text/javascript"></script>
+<script src="../../js/jquery.easing.1.3.js" language="JavaScript" type="text/javascript"></script>
+<script src="../../js/exvalidation.js" language="JavaScript" type="text/javascript"></script>
+<script src="../../js/exchecker-ja.js" language="JavaScript" type="text/javascript"></script>
+<script src="../../js/overlayform.js" language="JavaScript" type="text/javascript"></script>
+
+</head>
+<body background="../../img/webtreats_stone_3.jpg">
+
+<script type="text/javascript" src="../../js/jquery.tooltip.js/jquery.tooltip.js"></script>
+
+<div class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Remainder</a>
+
+    <ul class="nav">
+      <li class="active"><a href="/index">Home</a></li>
+      <li><a href="/logout"><i class="icon-off"></i>Logout</a></li>
+        <div class="btn-group" >
+          <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i>
+            
+            [% c.user.get('unam') %]
+          </a>
+        </div>
+    </ul>
+
+  </div>
 </div>
-<div class="controls" align="right">                              
-<button type="submit" class="btn btn-danger"><i class="icon-envelope icon-white" style="margin-top: 1px;"></i>保存</button>
-<button type="reset" class="btn btn-inverse"><i class="icon-remove icon-white" style="margin-top: 1px;"></i>破棄</button>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span6">
+        <div class="well" align="center">
+        
+          <br>
+          <form method="POST" action="/memoedit/[% id %]">
+            <textarea class="input-xlarge" name="editedmemo" id="textarea" rows="8" cols="320">[% editmemo.memo | html %]</textarea>
+            <div class="controls">
+              <a href="/memo"><i class="icon-remove icon-white" style="margin-top: 1px;"></i>戻る</a>&nbsp&nbsp　　　&nbsp　　　&nbsp
+              <button type="submit" class="btn btn-danger"><i class="icon-envelope icon-white" style="margin-top: 1px;"></i>保存</button>
+              <button type="reset" class="btn btn-inverse"><i class="icon-remove icon-white" style="margin-top: 1px;"></i>破棄</button>
+            </div>
+        </div>
+      </div>
+      <div class="span5">
+        <div class="well" align="left">
+          設定<br>
+          <!-- 複数個をチェックボックスで指定<br> -->
+          <li>Remindする日程</li>
+          <!-- <select name="select" style="width: 30px"> -->
+          <!--google map のルート検索の時間指定のところと同じように,一覧から選択できて,かつ,入力できるようにしたい<br>-->           
+        
+          <input type="checkbox" name="days" id="optionscheckbox" value="Mon">
+          月曜日
+          <input type="checkbox" name="days" id="optionscheckbox" value="Tue">
+          火曜日
+          <input type="checkbox" name="days" id="optionscheckbox" value="Wed">
+        水曜日
+          <input type="checkbox" name="days" id="optionscheckbox" value="Thu">
+        木曜日
+          <input type="checkbox" name="days" id="optionscheckbox" value="Fri">
+          金曜日
+          <br>
+          <input type="checkbox" name="days" id="optionscheckbox" value="Sat">
+          土曜日
+          <input type="checkbox" name="days" id="optionscheckbox" value="Sun">
+          日曜日
+          <br>
+        <br>
+        通知時間:
+        <!--
+            [ datetimenow ] 現在時刻
+                  [ datetimeweekly ]<br> 曜日
+                  [ email ]<br>
+                -->
+        [%- SET dty=datetime.year;dtmo=datetime.month;dtd=datetime.day;dth=datetime.hour;dtmi=datetime.minute; -%]
+        [%-MACRO select (name,start,end) BLOCK -%]
+        <select id="[% name %]" name="[% name %]" style="width:70px;">
+          [%- datetimelist = [
+          {datetimename => 'year',datetimenow => datetimenow.year },
+                {datetimename => 'month',datetimenow => datetimenow.month },
+          {datetimename => 'day',datetimenow => datetimenow.day },
+          {datetimename => 'hour',datetimenow => datetimenow.hour },
+          {datetimename => 'minute',datetimenow => datetimenow.minute}
+          ]-%]
+          [%- FOREACH n = datetimelist %]
+          [%- IF name==n.datetimename -%]
+          [%- FOREACH i = [start..end] %]
+          [%- IF i==n.datetimenow -%]
+          <option value="[% i %]" selected >[% i %]</option> <!-- hour or min が0-23 or 0-59のなかで,現時刻に等しいものをselected-->
+          [%- ELSE -%]
+          <option value="[% i %]" >[% i %]</option>
+          [%- END -%]
+                [%- END %]
+          [%- END -%]
+          [%- END -%]
+        </select>
+        [%- END -%]
+        [% select ('hour',0,23) %]時
+        [% select ('minute',0,59) %]分
+        <br><br>
+        
+        [%-MACRO selectfrom (name,start,end) BLOCK -%]
+              <select id="[% name %]" name="[% name %]" style="width:70px;">
+                [%- datetimelist = [
+                {datetimename => 'fromyear',datetimenowfrom => datetimenow.year },
+                {datetimename => 'frommonth',datetimenowfrom => datetimenow.month },
+                {datetimename => 'fromday',datetimenowfrom => datetimenow.day },
+                {datetimename => 'fromhour',datetimenowfrom => datetimenow.hour },
+                {datetimename => 'fromminute',datetimenowfrom => datetimenow.minute}
+                ]-%]
+                [%- FOREACH n = datetimelist %]
+                [%- IF name == n.datetimename -%]
+                [%- FOREACH i = [start..end] %]
+                [%- IF i == n.datetimenowfrom -%]
+                <option value="[% i %]" selected >[% i %]</option>
+                [%- ELSE -%]
+                <option value="[% i %]" >[% i %]</option>
+                [%- END -%]
+                [%- END %]
+                [%- END -%]
+                [%- END -%]
+              </select>
+              [%- END -%]
+              [% selectfrom ('fromyear' ,2012,2050) %]年
+              [% selectfrom ('frommonth',1,12) %]月
+              [% selectfrom ('fromday',1,31) %]日<!--月によって変える-->
+              <br>
+              から
+              <br>
+              [%-MACRO selectto (name,start,end) BLOCK -%]
+              <select id="[% name %]" name="[% name %]" style="width:70px;"><!-- タグを生成 -->
+                [%- datetimelist = [
+                {datetimename => 'toyear',datetimenowto => datetimeto.year },
+                {datetimename => 'tomonth',datetimenowto => datetimeto.month },
+                {datetimename => 'today',datetimenowto => datetimeto.day },
+                {datetimename => 'tohour',datetimenowto => datetimeto.hour },
+                {datetimename => 'tominute',datetimenowto => datetimeto.minute}
+                ]-%]
+                [%- FOREACH n = datetimelist %]
+                [%- IF name==n.datetimename -%]
+                [%- FOREACH i = [start..end] %]
+                [%- IF i==n.datetimenowto -%]
+                <option value="[% i %]" selected >[% i %]</option>
+                [%- ELSE -%]
+                <option value="[% i %]" >[% i %]</option>
+                [%- END -%]
+                [%- END %]
+                [%- END -%]
+                [%- END -%]
+              </select>
+              [%- END -%]
+              [% selectto ('toyear' ,2012,2050) %]年
+              [% selectto ('tomonth',1,12) %]月
+              [% selectto ('today',1,31) %]日<!--月によって変える-->
+              <br>
+              通知方法：メール,ポップアップ<br>
+              <input type="checkbox" id="optionscheckbox" name="notification" value="mail" checked>
+              <i class="icon-envelope icon-black" style="margin-top: 1px;"></i>メール
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
 </div>
 
-[% FOREACH item = remaindermemo %]
+  [% FOREACH item = remaindermemo %]
             <div class="well well-small">
             <input type="checkbox">
             <p align="right">

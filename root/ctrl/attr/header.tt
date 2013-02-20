@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <title>Reminder</title>
 
-    <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css">
-    <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
-    <link href="./css/bootstrap.css" rel="stylesheet">
-    <link href="./css/memoremainder.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../css/jquery.tagsinput.css">
+    <link rel="stylesheet" type="text/css" href="../../js/jquery.tooltip.js/jquery.tooltip.css" />
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+    <link href="../../css/memoremainder.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
 </head>
-<body background="./img/webtreats_stone_3.jpg">
+<body background="../../img/webtreats_stone_3.jpg">
 <div class="navbar">
   <div class="navbar-inner">
     <a class="brand" href="">Reminder</a>
