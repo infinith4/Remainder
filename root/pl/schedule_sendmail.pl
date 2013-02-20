@@ -93,6 +93,9 @@ for ($i = 0;$i < $cnt ;$i++){
 
 print Dumper %docdatas;
 
+use Schedule::Sendmail;
+
+&sendmail()
 #現在時間取得
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();

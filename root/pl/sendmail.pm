@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+package Schedule::Sendmail;
+
 #時,分,%userdata(userid,useremail,subject),memoが与えられたら,その内容に応じて,特定のuserに送信する
 sub hourmin_entry{
     my ($hours,$mins,$userdatas,@memos) = @_;
