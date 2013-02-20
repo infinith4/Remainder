@@ -371,12 +371,13 @@ sub memo :Local {
     
     #Create for new login user.
     
-    my $userid = "tsuzuki";
+    my $userid = $c->user->get('userid');
+    #create new memo.
     if($c->req->method eq 'POST'){
         if($memo ne ''){
             
             my $row = $c->model('RemainderDB::RemainderMemo')->create({
-                userid => "tsuzuki",#loginしているuseridにする"infinith4",# ここおかしい $c->request->params->{uid},
+                userid => $userid, #login しているuserid
                 memo => $memo,
                 #weektimes => $weektimes,
                 tag => '',
@@ -398,12 +399,12 @@ sub memo :Local {
     #$c->response->body('success')
 
     $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')
-                                  ->search({ userid => 'tsuzuki'},
+                                  ->search({ userid => $userid},
                                            {order_by => {-desc => 'id'}},
                                            #rows => 3,
                                   )];
     use Data::Dumper;
-    print Dumper [$c->model('RemainderDB::RemainderMemo')->search({ userid => 'tsuzuki'})];
+#    print Dumper [$c->model('RemainderDB::RemainderMemo')->search({ userid => 'tsuzuki'})];
 #    $c->stash->{template} = 'memo.tt';
     
     #print $day;
