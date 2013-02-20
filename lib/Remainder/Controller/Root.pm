@@ -411,6 +411,7 @@ sub remainder :Local {
    
 }
 
+#新規ユーザー登録
 sub signin :Local{
     my ($self,$c) = @_;
 
@@ -437,12 +438,11 @@ sub signin :Local{
 
 
 sub memo :Local {
-    my ($self ,$c) = @_;
+    my ($self ,$c,$page) = @_;
     
     #### Edit memo in form.htm.
     my $memoedit = $c->request->body_params->{'memoedit'};
     # Update memo
-    #sql
     
     #$c->stash->{list} = [$c->model('CatalDB::Book')->all];
     #my $memo = "";
@@ -490,7 +490,7 @@ sub memo :Local {
     
     #Create for new login user.
     
-    
+    my $userid = "tsuzuki";
     if($c->req->method eq 'POST'){
         if($memo ne ''){
             
@@ -511,10 +511,20 @@ sub memo :Local {
         $c->response->redirect("/memo");
     }
     $c->model('RemainderDB')->storage->debug(1);
+    #ログインしているuseridに応じて表示する。また、
     #mysql からmemoを取得し、.ttへ渡す
-    $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')->all];
+    #$c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')->all];
     #$c->response->body('success')
 
+    $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')
+                                  ->search({ userid => 'tsuzuki'},
+                                           {order_by => {-desc => 'id'}},
+                                           #rows => 3,
+                                  )];
+    use Data::Dumper;
+    print Dumper [$c->model('RemainderDB::RemainderMemo')->search({ userid => 'tsuzuki'})];
+#    $c->stash->{template} = 'memo.tt';
+    
     #print $day;
     #$c->stash->{day} = join ',',@$day;
     #現在の日付(時間ふくむ)
@@ -523,7 +533,7 @@ sub memo :Local {
     my  $day_abbr    = $dt->day_abbr;   # 曜日の省略名
     $c->stash->{datetimeweekly} = $day_abbr;
 
-    my $dtto = DateTime->now( time_zone => 'Asia/Tokyo' )->add(months => 12 );
+    my $dtto = DateTime->now( time_zone => 'Asia/Tokyo' )->add(months => 1 );
     #$dtto=$dtto->add( months => 12 );
     $c->stash->{datetimeto} = $dtto;
 
