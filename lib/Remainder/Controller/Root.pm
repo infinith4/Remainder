@@ -72,81 +72,6 @@ sub index :Local {
     }
 
 }
-    # Hello World
-    #$c->response->body( $c->welcome_message );
-
-#my $consumer_key   = 'PgpEemhYpWeviQ==';
-#my $consumer_secret    = 'YXPnSMwBfljWzXVtl9hcmTu1J3g=';
-
-#my $title = 'Test Hatena OAuth API';
-
-=pod
-
-sub save_request_token {
-    my ($request_token) = @_;
-
-    open(TOKEN, ">.session")    or die $!;
-    print TOKEN $request_token->as_encoded;
-    close(TOKEN);
-}
-
-sub load_request_token {
-    open(TOKEN, ".session")     or die $!;
-    my $request_token = OAuth::Lite::Token->from_encoded(<TOKEN>);
-    close(TOKEN);
-
-    return $request_token;
-}
-
-my $cgi = new CGI;
-
-my $consumer = new OAuth::Lite::Consumer(
-        consumer_key    => $consumer_key,
-        consumer_secret => $consumer_secret,
-    );
-
-if (! $cgi->param()) {
-    my $request_token = $consumer->get_request_token(
-            url             => 'https://www.hatena.com/oauth/initiate',
-            callback_url    => $cgi->url,
-            scope           => 'write_public,read_private',
-        )   or die $consumer->errstr."\n";
-    save_request_token($request_token);
-    print $cgi->redirect(
-            $consumer->url_to_authorize(
-                url     => 'https://www.hatena.ne.jp/oauth/authorize',
-                token   => $request_token,
-        ));
-}
-else {
-    my $oauth_verifier  = $cgi->param('oauth_verifier');
-    my $request_token   = load_request_token();
-
-    my $access_token = $consumer->get_access_token(
-            url         => 'https://www.hatena.com/oauth/token',
-            token       => $request_token,
-            verifier    => $oauth_verifier,
-        );
-
-    print $cgi->header,
-          $cgi->start_html(-title=>$title)
-              . $cgi->h1($cgi->a({href=>$cgi->url},$title))
-        . $cgi->dl(
-                $cgi->dt('Access Token:'), $cgi->dd($access_token->token),
-                $cgi->dt('Access Secret:'), $cgi->dd($access_token->secret),
-            )
-        . $cgi->end_html;
-}
-
-
-}
-
-=head2 default
-
-Standard 404 error page
-
-=cut
-#}
 
 
 sub twitter_login : Local {
@@ -177,37 +102,6 @@ Attempt to render a view, if needed.
 =cut
 
 sub end : ActionClass('RenderView') {}
-
-=pod
-sub login :Local {
-    my ($self,$c) = @_;
-    #formからの入力を取得
-    my $uid = $c->request->params->{uid};
-    my $passwd = $c->request->params->{passwd};
-
-    #user name,passwordを入力時のみ認証処理を実行
-    if(defined($uid) && defined($passwd)){
-        #user name,passwordで認証
-        if($c->authenticate({ uid => $uid ,passwd => $passwd })){
-            #認証成功
-            
-            $c->response->redirect("/memo");
-        }else{
-            #認証失敗時
-#sub auto : Private {
-#  my ($self, $c) = @_;
-#  if ($c->action->reverse eq 'login') { return 1; }
-#  if (!$c->user_exists) {
-#      $c->response->redirect($c->uri_for('/login'));
-#      return 0;
-#  }
-#  return 1;
-#}
-            $c->stash->{error} = 'ユーザー名またはパスワードが間違っています';
-        }
-    }
-}
-=cut
 
 
 sub logout : Local {
@@ -360,20 +254,7 @@ sub bookmarksetting :Local {
 ########################################
     #If user logined site,We check email by DataTable RemainderUsers.Because Email is Primary.
     #Create for new login user.
-=pod    
-    my $row = $c->model('RemainderDB::BookmarkSetting')->create({
-        userid => '',
-        memo => $memo,
-        #weektimes => $weektimes,
-        tag => '',
-        fromtime => "$fromtime",
-        totime => "$totime",
-        days => "$daystext",
-        notification => $notification,
-        #created => 'NOW()',
-        #updated => 'NOW()',
-    });
-=cut
+
     my $n = 20;
 
     for(0 .. $bookmarknum){
