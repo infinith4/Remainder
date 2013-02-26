@@ -10,6 +10,16 @@
     <link href="./css/memoremainder.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 
+   <!--oauth facebook hackbook -->
+  <script src="./oauth/facebook/js/_config.js"></script>
+  <script src="./oauth/facebook/js/ui.js"></script>
+  <script src="./oauth/facebook/js/auth.js"></script>
+  <script src="./oauth/facebook/js/feed.js"></script>
+  <script src="./oauth/facebook/js/graph_api.js"></script>
+  <script src="./oauth/facebook/js/requests.js"></script>
+  <script src="./oauth/facebook/js/credits.js"></script>
+  <link rel="stylesheet" type="text/css" href="./oauth/facebook/css/style.css">
+
 </head>
 <body background="./img/webtreats_stone_3.jpg">
 <div class="navbar">
@@ -46,12 +56,28 @@
   </div>
 </div>
 
+<!-- This initializes the Facebook JS SDK. -->
+<div id="fb-root"></div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
   <div class="hero-unit">
     <h1>Reminder</h1>
     <p>Reminderは,あなたのちょっと気になるを定期的にお知らせします。
       <a class="btn btn-large btn-primary" type="button" href="/signin">新規登録</a>
+    <br>
+    
+      
+
+      <div id="right-block">
+        <div class="show_when_not_connected">
+          <a onclick="promptLogin()" class="login-button"> 
+            <span>Login</span>
+          </a>
+        </div>
+      </div>
+    
+
     
     </p>
     
@@ -85,6 +111,7 @@ mission:
 ・sendmemo関数を曜日に対応させる
 ・memoeditを時間も編集できるようにする
 </pre>
+<br>
 <div id="foot">
     <div class="well">
     <p >Copyright INFINITY 2012.Product by <a href="http://www.hatena.ne.jp/infinity_th4/" target="blank">Hiroshi Tashiro</a>.</p>
