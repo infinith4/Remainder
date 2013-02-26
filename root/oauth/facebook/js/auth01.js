@@ -19,6 +19,7 @@ function handleStatusChange(session) {
     console.log('Got the user\'s session: ', session);
     
     if (session.authResponse) {
+        document.body.className = 'connected'; //set body class connected.
         
         //Fetch user's id, name, and picture
         FB.api('/me', {
@@ -41,10 +42,9 @@ function handleStatusChange(session) {
           
           clearAction();
         });
-        location.href="/memo"; //memoに飛ばしたいが、Root.pm のsub autoで制御されている
     }
     else  {
-      location.href="/index";
+      document.body.className = 'not_connected';
     
       clearAction();
     }
