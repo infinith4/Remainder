@@ -18,7 +18,7 @@ sub sendmemo{
         print "Sendmail:\n";
         print "to:",$_->{'userid'},"\n";
         my $content = $_->{'memo'};
-        my $mailcontent = "$_->{'userid'} さん\n\n内容:\n$content\n\n配信を停止する(http://localhost:3000/memo)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
+        my $mailcontent = "$_->{'userid'} さん\n\n内容:\n$content\n\n配信を停止する(http://27.120.91.248:3000/)\n\n-----------------------------------------------\n - Remainder -あなたの気になるをお知らせ-\n $frommail";
 
     #print $$hash{userid},"\n";
     #mail 送信

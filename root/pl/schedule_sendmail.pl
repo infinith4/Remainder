@@ -38,12 +38,16 @@ $db->do("set names utf8");
 
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
-print "current time:$hour:$min\n";
-if((0 <= $hour && $hour <= 9)||0 <= $min && $min <= 9){
+
+if(0 <= $hour && $hour <= 9){
     $hour = "0".$hour;
-    $min = "0".$min;
-    
 }
+
+if(0 <= $min && $min <= 9){
+    $min = "0".$min;
+
+}
+print "current time:$hour:$min\n";
 
 # SQL文を用意
 #                              0   1      2    3    4        5     6
@@ -72,11 +76,13 @@ for(my $i=0;$i < $cnt ;$i++){
     push(@doclabel,"doc".$i);
 }
 =cut
+
     
 while(my @rec = $sth->fetchrow_array){
     my %doc = ("userid" => "" ,"uemail" => "","memo"=> "","hour"=> "","min" => "","fromtime"=>"","totime"=>"");
 
-    #print Dumper @rec;
+    print "rec:\n";
+    print Dumper @rec;
     #docごとに,labelをつける
     $doc{'userid'} = $rec[0];
     $doc{'uemail'} = $rec[6];
