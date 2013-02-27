@@ -72,6 +72,71 @@ sub index :Local {
     }
 
 }
+=pod
+sub twitteroauth : Path :Args(0) {
+    my ( $self, $c ) = @_;
+ 
+    my $consumer = OAuth::Lite::Consumer->new(Remainder::Const::TOKENS);
+    my $request_token = $consumer->get_request_token();
+    my $uri = URI->new($consumer->{authorize_path});
+ 
+    $uri->query($consumer->gen_auth_query("GET",$consumer->{site},$request_token));
+    $c->stash->{authquery} = $uri->as_string;
+ 
+    $c->stash->{template} = 'twitteroauth.tt';
+}
+
+=cut
+sub auth : Local {
+    my ( $self, $c) = @_;
+ 
+    my $app_id = '376987082389393';
+    my $app_secret = 'e98421b675023fc82eccf180eda6ef68';
+    my $authz_endpoint = 'https://www.facebook.com/dialog/oauth';
+    my $token_endpoint = 'https://graph.facebook.com/oauth/access_token';
+    # Facebook Developers の Website with Facebook Login の Site URL
+    my $redirect_uri = 'http://localhost:3000/auth';
+
+    # 2) get authorization code
+    if ( my $code = $c->req->param('code') ) {
+
+        # 3) get access token
+        my $uri = URI->new($token_endpoint);
+        $uri->query_form(
+            client_id     => $app_id,
+            client_secret => $app_secret,
+            redirect_uri  => $redirect_uri,
+            code          => $code
+            );
+        my $ua     = LWP::UserAgent->new;
+        my $r      = $ua->get($uri);
+        my %params = ();
+        for my $pair ( split( /&/, $r->content ) ) {
+            my ( $key, $value ) = split( /=/, $pair );
+            $params{$key} = $value;
+        }
+        my $token = $params{access_token};
+
+        # 4) get protected resources
+        if ($token) {
+            my $url = 'https://graph.facebook.com/me/friends';
+            print "===============\n";
+            print $url,"\n";
+        } else {
+            $c->response->body('fail to get token');
+        }
+
+    } else { # 1) redirect to authorization endpoint
+
+        my $uri = URI->new($authz_endpoint);
+        $uri->query_form(
+            client_id    => $app_id,
+            redirect_uri => $redirect_uri,
+            );
+        $c->res->redirect($uri);
+    }
+
+}
 
 
 sub twitter_login : Local {
@@ -113,7 +178,7 @@ sub logout : Local {
 #全認証
 sub auto : Private {
     my ($self, $c) = @_;
-    if ($c->action->reverse eq 'index' || $c->action->reverse eq 'signin' || $c->action->reverse eq 'loginfacebook') { return 1; }
+    if ($c->action->reverse eq 'index' || $c->action->reverse eq 'signin' || $c->action->reverse eq 'auth') { return 1; }
     
     if (!$c->user_exists) {
         $c->response->redirect($c->uri_for('/index'));
@@ -132,6 +197,7 @@ sub bookmark :Local {
     
 }
 
+=pod
 sub bookmarksetting :Local {
 	my ($self ,$c) = @_;
     
@@ -283,6 +349,8 @@ sub bookmarksetting :Local {
 
     
 }
+
+=cut
 
 sub remainder :Local {
 	my ($self ,$c) = @_;

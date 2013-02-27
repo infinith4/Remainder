@@ -41,10 +41,15 @@ function handleStatusChange(session) {
           
           clearAction();
         });
-        location.href="/memo"; //memoに飛ばしたいが、Root.pm のsub autoで制御されている
+        //alert(user.id);
+        
+        //alert("login");
+        //alert(user);
+        //location.href="/memo"; //memoに飛ばしたいが、Root.pm のsub autoで制御されている
     }
     else  {
-      location.href="/index";
+        
+      //location.href="/index";
     
       clearAction();
     }
@@ -95,7 +100,7 @@ function promptPermission(permission) {
   FB.login(function(response) {
     if (response.authResponse) {
       checkUserPermissions(permission);
-      location.href="/memo";
+      //location.href="/memo";
     }
   }, {scope: permission});
 }

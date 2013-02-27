@@ -39,7 +39,11 @@ $db->do("set names utf8");
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
 print "current time:$hour:$min\n";
-
+if((0 <= $hour && $hour <= 9)||0 <= $min && $min <= 9){
+    $hour = "0".$hour;
+    $min = "0".$min;
+    
+}
 
 # SQL文を用意
 #                              0   1      2    3    4        5     6

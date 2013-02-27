@@ -1,0 +1,19 @@
+<html>
+<body>
+ 
+[% IF c.session.token == '' %]
+<a href='[% c.stash.authquery %]'>twitter認証</a>
+[% ELSE %]
+ 
+<form id='tweetform' action='tweet' method='post'>
+<textarea cols="40" rows="2" id='tweet' name='tweet'></textarea>
+<input type='submit' />
+</form>
+<p>last:[% c.stash.tweet %]</p>
+[%FOREACH tweet=c.stash.timeline %]
+<p>[% tweet.text %]</p>
+[%END%]
+ 
+[% END %]
+</body>
+</html>
