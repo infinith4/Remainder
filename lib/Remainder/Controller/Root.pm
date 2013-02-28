@@ -414,7 +414,7 @@ sub memo :Local {
     }else{
         $daystext = $days;
     }
-    print "==========",$daystext;
+    #print "==========",$daystext;
     #print $daystext,"\n";
     #print $days,"\n";
     #$c->stash->{day} = join ',',@$day;
