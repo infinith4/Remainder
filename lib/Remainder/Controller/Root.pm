@@ -352,13 +352,6 @@ sub bookmarksetting :Local {
 
 =cut
 
-sub remainder :Local {
-	my ($self ,$c) = @_;
-	#$c->response->body('こんにちは');
-    #$c->stash->{list} = [$c->model('CatalDB::Book')->all];
-    #$c->stash->{title} = 'Remainder - あなたの気になるをお知らせ！ -';
-   
-}
 
 #新規ユーザー登録
 sub signin :Local{
@@ -388,6 +381,8 @@ sub signin :Local{
 sub loginfacebook :Local {
     my ($self,$c) = @_;
 }
+
+
 
 sub memo :Local {
     my ($self ,$c,$page) = @_;
@@ -433,14 +428,6 @@ sub memo :Local {
 
     my $fromtime = $fromyear."-".$frommonth."-".$fromday." ".$fromhour.":".$frommin.":00";
     my $totime = $toyear."-".$tomonth."-".$today." ".$fromhour.":".$frommin.":00";
-    #data source
-    my $d = "DBI:mysql:RemainderMemo";
-    my $u = "remainderuser";
-    my $p = "remainderpass";
-    
-    #Connect database;
-    my $dbh = DBI->connect($d,$u,$p);
-#    my $loginuseremail = $c->request->body_params->{'loginuseremail'};
     my $loginuseremail = "tashirohiro4\@gmail.com";
 
     #If user logined site,We check email by DataTable RemainderUsers.Because Email is Primary.
@@ -476,12 +463,15 @@ sub memo :Local {
     #mysql からmemoを取得し、.ttへ渡す
     #$c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')->all];
     #$c->response->body('success')
-
+    
+    #5レコードを取得/memo/2,/memo/3..などで取得できる
+    $page = 1 unless $page;
     $c->stash->{remaindermemo} = [$c->model('RemainderDB::RemainderMemo')
-                                  ->search({ userid => $userid},
-                                           {order_by => {-desc => 'id'}},
-                                           #rows => 3,
-                                  )];
+                                  ->search({ userid => $userid},{
+                                           order_by => {-desc => 'id'},
+                                           rows => 5,
+                                           page => $page
+                                           })];
     use Data::Dumper;
 #    print Dumper [$c->model('RemainderDB::RemainderMemo')->search({ userid => 'tsuzuki'})];
 #    $c->stash->{template} = 'memo.tt';
