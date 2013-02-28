@@ -19,9 +19,55 @@
   <script src="./oauth/facebook/js/requests.js"></script>
   <script src="./oauth/facebook/js/credits.js"></script>
   <link rel="stylesheet" type="text/css" href="./oauth/facebook/css/style.css">
+ <style type="text/css">
+    h1 {
+      -moz-animation-duration: 3s;
+      -webkit-animation-duration: 3s;
+      -moz-animation-name: slidein;
+      -webkit-animation-name: slidein;
+    }
+    
+    @-moz-keyframes slidein {
+      from {
+        margin-left:100%;
+        width:300%
+      }
+      
+      75% {
+        font-size:300%;
+        margin-left:25%;
+        width:150%;
+      }
+      
+      to {
+        margin-left:0%;
+        width:100%;
+      }
+    }
+    
+    @-webkit-keyframes slidein {
+      from {
+        margin-left:150%;
+        width:200%
+      }
+      
+      100% {
+        font-size:300%;
+        margin-left:25%;
+        width:150%;
+      }
+      
+      to {
+      	
+        margin-left:0%;
+        width:100%;
+      }
+    }
 
+  </style>
 </head>
 <body background="./img/webtreats_stone_3.jpg">
+
 <div class="navbar">
   <div class="navbar-inner">
     <a class="brand" href="">Reminder</a>

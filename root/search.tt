@@ -1,0 +1,5 @@
+[% FOREACH item = list %]
+
+	[% item.memo | html %]<br>
+	
+[%- END -%]

@@ -382,11 +382,12 @@ sub loginfacebook :Local {
     my ($self,$c) = @_;
 }
 
-sub search_literal :Local{
+sub search :Local{
     my ($self,$c)=@_;
+    my $search_word = "test";
     $c->stash->{list} = [$c->model('RemainderDB::RemainderMemo')
-                         ->search_literal('memo like ? ','%test%')];
-    $c->stash->{template} = 'list.tt';
+                         ->search_literal('memo like ? ',('%'.$search_word.'%'))];
+    $c->stash->{template} = 'search.tt';
 }
     
 sub memo :Local {
