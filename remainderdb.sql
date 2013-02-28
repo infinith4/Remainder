@@ -26,7 +26,7 @@ CREATE TABLE `RemainderMemo` (
   `rm` int(1) NOT NULL, /* 削除されているなら1,そうでないなら0 */
   `fromtime` datetime NOT NULL, /* 送信開始日:YYYY-MM-DD HH:MM:SS */
   `totime` datetime NOT NULL,   /* 送信終了日:YYYY-MM-DD HH:MM:SS */
-  `days` varchar(20),   /* 曜日の指定(mon,tue,fri,etc)*/
+  `days` varchar(50),   /* 曜日の指定(mon,tue,fri,etc)*/
   `notification` varchar(10),   /* 知らせない:non,メール:mail or ポップアップ:popup(今後) */
   `importance` int(3),  /* 重要:2,普通:1,微妙:0 */
   `created` datetime NOT NULL, /* 作成日 */
@@ -71,7 +71,7 @@ CREATE TABLE `User` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `User` WRITE;
-/*!40000 ALTER TABLE `usr` DISABLE KEYS */;
+/*!40000 ALTER TABLE `User` DISABLE KEYS */;
 
 INSERT INTO `User` VALUES ('1','infinith4','827ccb0eea8a706c4c34a16891f84e7b','田代 浩','infinith4@gmail.com','admin,member'),('2','tsuzuki','827ccb0eea8a706c4c34a16891f84e7b','鈴木太郎','infinity.th4@gmail.com','admin');
 

@@ -39,10 +39,15 @@ $db->do("set names utf8");
 my $currenttime = DateTime->now( time_zone => 'Asia/Tokyo' );
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
 
+my @weekly = ('Sun', 'Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sut'); # 表示したい曜日文字
+print "now day:",$weekly[$wday],"\n"; # 曜日を表示
+
+#時が1桁の場合
 if(0 <= $hour && $hour <= 9){
     $hour = "0".$hour;
 }
 
+#分が1桁の場合
 if(0 <= $min && $min <= 9){
     $min = "0".$min;
 
@@ -53,8 +58,8 @@ print "current time:$hour:$min\n";
 #                              0   1      2    3    4        5     6
 #my $sth = $db->prepare("SELECT id,userid,memo,tag,fromtime,totime,days FROM RemainderMemo WHERE '$dtnow' >= fromtime and days like '%$dayabbr%' ORDER BY fromtime asc"); #fromtime でソート.現在以前
 #$dtnow:現在時間がfromtime-totimeの間に入っている AND 現在時間の時間とfromtimeの時間に一致するレコードを取得
-#現在時刻に一致するレコードのみを取得
-my $sth = $db->prepare("SELECT userid,memo,fromtime,totime,days,unam,uemail FROM RemainderMemo INNER JOIN User Using (userid) WHERE (('$dtnow' <= fromtime AND fromtime <= '$dt_plus1min') OR (fromtime <= '$dtnow' AND '$dt_plus1min' <=totime) OR ('$dtnow' <= totime AND totime <= '$dt_plus1min') ) AND DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00' ORDER BY fromtime"); #fromtime でソート.現在以前
+#現在時刻と曜日に一致するレコードのみを取得
+my $sth = $db->prepare("SELECT userid,memo,fromtime,totime,days,unam,uemail FROM RemainderMemo INNER JOIN User Using (userid) WHERE (('$dtnow' <= fromtime AND fromtime <= '$dt_plus1min') OR (fromtime <= '$dtnow' AND '$dt_plus1min' <=totime) OR ('$dtnow' <= totime AND totime <= '$dt_plus1min') ) AND DATE_FORMAT(fromtime, '%H:%i:%s') = '$hour:$min:00' AND days LIKE '%$weekly[$wday]%' ORDER BY fromtime"); #fromtime でソート.現在以前
 
 if(!$sth->execute){
     print "SQL失敗\n";

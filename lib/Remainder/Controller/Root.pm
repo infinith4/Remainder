@@ -403,11 +403,18 @@ sub memo :Local {
 #    my $weektimes = $c->request->body_params->{'weektimes'};
     #my $fromtime = $c->request->body_params->{'days'};
     
-    my $days = $c->request->body_params->{'days'};
+    my $days = $c->request->body_params->{'days'}; 
+    print Dumper $days;
+    #一つの曜日だけ指定するとエラーになる
     my $daystext = "";
-    foreach (@$days){
-        $daystext = $daystext.$_.",";
-    } 
+    if(ref($days) eq 'ARRAY'){
+        foreach (@$days){
+            $daystext = $daystext.$_.",";
+        }
+    }else{
+        $daystext = $days;
+    }
+    print "==========",$daystext;
     #print $daystext,"\n";
     #print $days,"\n";
     #$c->stash->{day} = join ',',@$day;

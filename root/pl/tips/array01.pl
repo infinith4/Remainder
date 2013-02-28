@@ -19,16 +19,23 @@ foreach my $ref (@persons){
 print "\n";
 
 #reference
-my $personsref = [
-    ['Ken', 'Japan', 19],
-    ['Taro', 'USA', 45]
-    ];
+#my $personsref = [
+#    ['Ken', 'Japan', 19],
+#    ['Taro', 'USA', 45]
+#    ];
 
-print $personsref->[0][1],"\n";
+my $personsref = [11];
 
+print $personsref->[0],"\n";
+
+foreach (@$personsref){
+    print "$_\n";
+}
+=pod
 foreach my $ary (@$personsref){
     foreach (@$ary){
         print "$_\n";
     }
 
 } 
+=cut
