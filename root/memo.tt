@@ -312,7 +312,13 @@
             
 
             [% END %]
-            
+            <div>
+				<a href="[% Catalyst.request.uri_with(page=>pager.first_page) %]">&lt;&lt;</a>
+				<a href="[% Catalyst.request.uri_with(page=>pager.previous_page) %]">&lt;</a>
+				<a href="[% Catalyst.request.uri_with(page=>pager.next_page) %]">&gt;</a>
+				<a href="[% Catalyst.request.uri_with(page=>pager.last_page) %]">&gt;&gt;</a>
+				<span>[ [% pager.current_page %] / [% pager.last_page %] ]</span>
+			</div>
             
             <br>
           </div>

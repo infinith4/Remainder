@@ -382,8 +382,13 @@ sub loginfacebook :Local {
     my ($self,$c) = @_;
 }
 
-
-
+sub search_literal :Local{
+    my ($self,$c)=@_;
+    $c->stash->{list} = [$c->model('RemainderDB::RemainderMemo')
+                         ->search_literal('memo like ? ','%test%')];
+    $c->stash->{template} = 'list.tt';
+}
+    
 sub memo :Local {
     my ($self ,$c,$page) = @_;
     
@@ -472,6 +477,7 @@ sub memo :Local {
                                            rows => 5,
                                            page => $page
                                            })];
+    
     use Data::Dumper;
 #    print Dumper [$c->model('RemainderDB::RemainderMemo')->search({ userid => 'tsuzuki'})];
 #    $c->stash->{template} = 'memo.tt';
