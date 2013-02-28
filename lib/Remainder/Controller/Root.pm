@@ -383,8 +383,9 @@ sub loginfacebook :Local {
 }
 
 sub search :Local{
-    my ($self,$c)=@_;
-    my $search_word = "test";
+    my ($self,$c,$search_word)=@_;
+    $search_word = $c->request->body_params->{'search_word'};
+    if(!$search_word){$c->response->redirect("/memo");}
     $c->stash->{list} = [$c->model('RemainderDB::RemainderMemo')
                          ->search_literal('memo like ? ',('%'.$search_word.'%'))];
     $c->stash->{template} = 'search.tt';

@@ -254,8 +254,8 @@
             <div class="well">
             <div align="right">
               <!-- 検索 -->
-              <form class="form-search">
-                <input type="text" class="input-medium search-query">
+              <form class="form-search" method="POST" action="/search">
+                <input type="text" name="search_word" class="input-medium search-query">
                 <button type="submit" class="btn">検索</button>
               </form>
               <form action="http://www.google.com/search" method="get">
@@ -312,13 +312,7 @@
             
 
             [% END %]
-            <div>
-				<a href="[% Catalyst.request.uri_with(page=>pager.first_page) %]">&lt;&lt;</a>
-				<a href="[% Catalyst.request.uri_with(page=>pager.previous_page) %]">&lt;</a>
-				<a href="[% Catalyst.request.uri_with(page=>pager.next_page) %]">&gt;</a>
-				<a href="[% Catalyst.request.uri_with(page=>pager.last_page) %]">&gt;&gt;</a>
-				<span>[ [% pager.current_page %] / [% pager.last_page %] ]</span>
-			</div>
+            
             
             <br>
           </div>

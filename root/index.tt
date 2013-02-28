@@ -20,7 +20,7 @@
   <script src="./oauth/facebook/js/credits.js"></script>
   <link rel="stylesheet" type="text/css" href="./oauth/facebook/css/style.css">
  <style type="text/css">
-    h1 {
+    h1,p#mes {
       -moz-animation-duration: 3s;
       -webkit-animation-duration: 3s;
       -moz-animation-name: slidein;
@@ -109,7 +109,7 @@
     <script src="js/bootstrap.min.js"></script>
   <div class="hero-unit">
     <h1>Reminder</h1>
-    <p>Reminderは,あなたのちょっと気になるを定期的にお知らせします。
+    <p id="mes">Reminderは,あなたのちょっと気になるを定期的にお知らせします。
       <a class="btn btn-large btn-primary" type="button" href="/signin">新規登録</a>
     <br>
     
