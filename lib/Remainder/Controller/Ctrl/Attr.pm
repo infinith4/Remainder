@@ -58,6 +58,19 @@ sub memoedit_second :Chained('memoedit_top') :PathPart('') {
   $c->model('RemainderDB')->storage->debug(1);
   #mysql からmemoを取得し、.ttへ渡す
   $c->stash->{editmemo} = $c->model('RemainderDB::RemainderMemo')->find($memoid);
+      my $fromyear = $c->request->body_params->{'fromyear'};
+    my $frommonth = $c->request->body_params->{'frommonth'};
+    my $fromday = $c->request->body_params->{'fromday'};
+    my $toyear = $c->request->body_params->{'toyear'};
+    my $tomonth = $c->request->body_params->{'tomonth'};
+    my $today = $c->request->body_params->{'today'};
+    my $fromhour = $c->request->body_params->{'hour'};
+    my $frommin = $c->request->body_params->{'minute'};
+
+    my $fromtime = $fromyear."-".$frommonth."-".$fromday." ".$fromhour.":".$frommin.":00";
+    my $totime = $toyear."-".$tomonth."-".$today." ".$fromhour.":".$frommin.":00";
+    my $userid = $c->user->get('userid');
+
   
   #保存ボタンが押されたら
   if($c->req->method eq 'POST'){
@@ -65,7 +78,11 @@ sub memoedit_second :Chained('memoedit_top') :PathPart('') {
       #memoのアップデート
       my $review = $c->model('RemainderDB::RemainderMemo')->update_or_new({
           id => $memoid,
-          memo => $editedmemo
+          memo => $editedmemo,
+          tag => '',
+          fromtime => "$fromtime",
+          totime => "$totime",
+          
                                                    });
       if($review->in_storage){
           $c->response->redirect("/memo");
