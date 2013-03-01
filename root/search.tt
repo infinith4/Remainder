@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title>Memo Reminder</title>
 
-    <link href="../css/memoremainder.css" rel="stylesheet">
-    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="./css/memoremainder.css" rel="stylesheet">
+    <link href="./css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/jquery.tagsinput.css" />
     <link rel="stylesheet" type="text/css" href="./js/jquery.tooltip.js/jquery.tooltip.css" />
     
@@ -254,17 +254,14 @@
             <div class="well">
             <div align="right">
               <!-- 検索 -->
-              <form class="form-search">
-                <input type="text" class="input-medium search-query">
+              <form class="form-search" method="POST" action="/search">
+                <input type="text" name="search_word" class="input-medium search-query">
                 <button type="submit" class="btn">検索</button>
               </form>
-              <form action="http://www.google.com/search" method="get">
-                <input type="hidden" name="hl" value="ja">
-                <input type="hidden" name="as_sitesearch" value="サイトのURL">
-                <input type="text" name="q" size="16" value="">
-                <input class="button" type="submit" value="Googleでサイト内検索">
-              </form>
+              
+              <font color="#ff0000">[% search_about %]</font>について検索
             </div>
+            
 
             <h4>Category</h4>
 

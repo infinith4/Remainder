@@ -90,20 +90,21 @@
                   [ datetimeweekly ]<br> 曜日
                   [ email ]<br>
                 -->
-        [%- SET dty=datetime.year;dtmo=datetime.month;dtd=datetime.day;dth=datetime.hour;dtmi=datetime.minute; -%]
+        [%- SET dty=editmemo.fromtime.year;dtmo=editmemo.fromtime.month;dtd=editmemo.fromtime.day;dth=editmemo.fromtime.hour;dtmi=editmemo.fromtime.minute; -%]
+        [% editmemo.fromtime.year %]
         [%-MACRO select (name,start,end) BLOCK -%]
         <select id="[% name %]" name="[% name %]" style="width:70px;">
           [%- datetimelist = [
-          {datetimename => 'year',datetimenow => datetimenow.year },
-                {datetimename => 'month',datetimenow => datetimenow.month },
-          {datetimename => 'day',datetimenow => datetimenow.day },
-          {datetimename => 'hour',datetimenow => datetimenow.hour },
-          {datetimename => 'minute',datetimenow => datetimenow.minute}
+          {datetimename => 'year',fromtime => editmemo.fromtime.year },
+                {datetimename => 'month',fromtime => editmemo.fromtime.month },
+          {datetimename => 'day',fromtime => editmemo.fromtime.day },
+          {datetimename => 'hour',fromtime => editmemo.fromtime.hour },
+          {datetimename => 'minute',fromtime => editmemo.fromtime.minute}
           ]-%]
           [%- FOREACH n = datetimelist %]
           [%- IF name==n.datetimename -%]
           [%- FOREACH i = [start..end] %]
-          [%- IF i==n.datetimenow -%]
+          [%- IF i==n.fromtime -%]
           <option value="[% i %]" selected >[% i %]</option> <!-- hour or min が0-23 or 0-59のなかで,現時刻に等しいものをselected-->
           [%- ELSE -%]
           <option value="[% i %]" >[% i %]</option>
@@ -120,16 +121,16 @@
         [%-MACRO selectfrom (name,start,end) BLOCK -%]
               <select id="[% name %]" name="[% name %]" style="width:70px;">
                 [%- datetimelist = [
-                {datetimename => 'fromyear',datetimenowfrom => datetimenow.year },
-                {datetimename => 'frommonth',datetimenowfrom => datetimenow.month },
-                {datetimename => 'fromday',datetimenowfrom => datetimenow.day },
-                {datetimename => 'fromhour',datetimenowfrom => datetimenow.hour },
-                {datetimename => 'fromminute',datetimenowfrom => datetimenow.minute}
+                {datetimename => 'fromyear',fromtime => editmemo.fromtime.year },
+                {datetimename => 'frommonth',fromtime => editmemo.fromtime.month },
+                {datetimename => 'fromday',fromtime => editmemo.fromtime.day },
+                {datetimename => 'fromhour',fromtime => editmemo.fromtime.hour },
+                {datetimename => 'fromminute',fromtime => editmemo.fromtime.minute}
                 ]-%]
                 [%- FOREACH n = datetimelist %]
                 [%- IF name == n.datetimename -%]
                 [%- FOREACH i = [start..end] %]
-                [%- IF i == n.datetimenowfrom -%]
+                [%- IF i == n.fromtime -%]
                 <option value="[% i %]" selected >[% i %]</option>
                 [%- ELSE -%]
                 <option value="[% i %]" >[% i %]</option>
@@ -148,16 +149,16 @@
               [%-MACRO selectto (name,start,end) BLOCK -%]
               <select id="[% name %]" name="[% name %]" style="width:70px;"><!-- タグを生成 -->
                 [%- datetimelist = [
-                {datetimename => 'toyear',datetimenowto => datetimeto.year },
-                {datetimename => 'tomonth',datetimenowto => datetimeto.month },
-                {datetimename => 'today',datetimenowto => datetimeto.day },
-                {datetimename => 'tohour',datetimenowto => datetimeto.hour },
-                {datetimename => 'tominute',datetimenowto => datetimeto.minute}
+                {datetimename => 'toyear',totime => editmemo.totime.year },
+                {datetimename => 'tomonth',totime => editmemo.totime.month },
+                {datetimename => 'today',totime => editmemo.totime.day },
+                {datetimename => 'tohour',totime => editmemo.totime.hour },
+                {datetimename => 'tominute',totime => editmemo.totime.minute}
                 ]-%]
                 [%- FOREACH n = datetimelist %]
                 [%- IF name==n.datetimename -%]
                 [%- FOREACH i = [start..end] %]
-                [%- IF i==n.datetimenowto -%]
+                [%- IF i==n.totime -%]
                 <option value="[% i %]" selected >[% i %]</option>
                 [%- ELSE -%]
                 <option value="[% i %]" >[% i %]</option>

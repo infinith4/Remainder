@@ -58,6 +58,7 @@ sub memoedit_second :Chained('memoedit_top') :PathPart('') {
   $c->model('RemainderDB')->storage->debug(1);
   #mysql からmemoを取得し、.ttへ渡す
   $c->stash->{editmemo} = $c->model('RemainderDB::RemainderMemo')->find($memoid);
+  
   #保存ボタンが押されたら
   if($c->req->method eq 'POST'){
       my $editedmemo = $c->request->body_params->{'editedmemo'};

@@ -388,7 +388,9 @@ sub search :Local{
     if(!$search_word){$c->response->redirect("/memo");}
     $c->stash->{list} = [$c->model('RemainderDB::RemainderMemo')
                          ->search_literal('memo like ? ',('%'.$search_word.'%'))];
+    
     $c->stash->{template} = 'search.tt';
+    $c->stash->{search_about} = $search_word;
 }
     
 sub memo :Local {
